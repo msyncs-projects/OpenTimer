@@ -59,6 +59,13 @@ export default function Home() {
       if (!isStandalone && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         setShowPwaBanner(true);
       }
+
+      // Register Offline PWA Service Worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .catch((err) => console.warn('Service worker registration failed:', err));
+      }
     }
   }, []);
 
