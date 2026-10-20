@@ -110,7 +110,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-full h-full flex flex-col bg-black text-white relative overflow-y-auto">
+    <main className="min-h-dvh flex flex-col bg-black text-white relative">
       {/* Top Header Bar */}
       <header className="safe-top sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3 border-b border-neutral-800 flex items-center justify-between">
         {/* App Logo & Branding */}
@@ -160,11 +160,11 @@ export default function Home() {
         )}
 
         {/* Tab Selector */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 bg-neutral-900 rounded-2xl border border-neutral-800 mb-4">
+        <div className="grid grid-cols-2 gap-2 p-1.5 bg-neutral-900 rounded-2xl border border-neutral-800 mb-4 select-none">
           <button
             type="button"
             onClick={() => setActiveTab('timers')}
-            className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition ${
+            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
               activeTab === 'timers'
                 ? 'bg-neutral-800 text-white shadow'
                 : 'text-neutral-400 hover:text-white'
@@ -177,7 +177,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setActiveTab('history')}
-            className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition ${
+            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
               activeTab === 'history'
                 ? 'bg-neutral-800 text-white shadow'
                 : 'text-neutral-400 hover:text-white'

@@ -14,9 +14,6 @@ import {
   RotateCw,
   Flame,
   Dumbbell,
-  Settings,
-  BookOpen,
-  Sparkles,
 } from 'lucide-react';
 
 interface WorkoutListViewProps {
@@ -54,7 +51,7 @@ export function WorkoutListView({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search custom timers..."
-            className="w-full bg-neutral-900 border border-neutral-800 rounded-2xl px-4 py-2.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600"
+            className="w-full bg-neutral-900 border border-neutral-800 rounded-2xl px-4 py-3 text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-neutral-600"
           />
         </div>
       )}
@@ -71,7 +68,8 @@ export function WorkoutListView({
           return (
             <div
               key={workout.id}
-              className="group bg-neutral-900 hover:bg-neutral-850 border border-neutral-800 rounded-3xl p-4 transition-all duration-200 shadow-lg relative overflow-hidden"
+              onClick={() => onStart(workout)}
+              className="group bg-neutral-900 hover:bg-neutral-850 active:bg-neutral-800 border border-neutral-800 rounded-3xl p-4 transition-all duration-150 shadow-lg relative overflow-hidden cursor-pointer select-none"
             >
               {/* Accent Left Border Indicator */}
               <div
@@ -120,8 +118,11 @@ export function WorkoutListView({
                 {/* Big Green Start Button */}
                 <button
                   type="button"
-                  onClick={() => onStart(workout)}
-                  className="w-14 h-14 rounded-2xl bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition-all active:scale-95 shrink-0"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onStart(workout);
+                  }}
+                  className="w-14 h-14 rounded-2xl bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition-all active:scale-95 shrink-0 cursor-pointer"
                   aria-label={`Start ${workout.name}`}
                 >
                   <Play className="w-7 h-7 fill-black ml-0.5" />
@@ -129,28 +130,40 @@ export function WorkoutListView({
               </div>
 
               {/* Action Bar (Edit, Duplicate, Share, Delete) */}
-              <div className="flex items-center justify-between pt-3 mt-3 border-t border-neutral-800/80 pl-1">
+              <div
+                className="flex items-center justify-between pt-3 mt-3 border-t border-neutral-800/80 pl-1"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <div className="flex items-center gap-1">
                   <button
                     type="button"
-                    onClick={() => onEdit(workout)}
-                    className="px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(workout);
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer"
                   >
                     <Edit2 className="w-3.5 h-3.5" /> Edit
                   </button>
 
                   <button
                     type="button"
-                    onClick={() => onDuplicate(workout)}
-                    className="px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDuplicate(workout);
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" /> Copy
                   </button>
 
                   <button
                     type="button"
-                    onClick={() => onShare(workout)}
-                    className="px-2.5 py-1 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShare(workout);
+                    }}
+                    className="px-3 py-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-1 transition active:scale-95 cursor-pointer"
                   >
                     <Share2 className="w-3.5 h-3.5" /> Share
                   </button>
@@ -159,8 +172,11 @@ export function WorkoutListView({
                 {!workout.isDefault && (
                   <button
                     type="button"
-                    onClick={() => onDelete(workout.id)}
-                    className="p-1.5 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-neutral-800 transition active:scale-95"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete(workout.id);
+                    }}
+                    className="p-2 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-neutral-800 transition active:scale-95 cursor-pointer"
                     title="Delete timer"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -183,7 +199,7 @@ export function WorkoutListView({
         <button
           type="button"
           onClick={onCreateNew}
-          className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-400 text-black flex items-center justify-center shadow-2xl shadow-green-500/40 transition-all duration-200 active:scale-90 font-black border-2 border-green-300"
+          className="w-16 h-16 rounded-full bg-green-500 hover:bg-green-400 text-black flex items-center justify-center shadow-2xl shadow-green-500/50 transition-all duration-200 active:scale-90 font-black border-2 border-green-300 cursor-pointer"
           aria-label="Create Custom Workout"
         >
           <Plus className="w-8 h-8 stroke-[3]" />

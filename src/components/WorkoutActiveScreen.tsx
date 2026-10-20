@@ -21,7 +21,6 @@ import {
   Flame,
   Award,
   Clock,
-  Sparkles,
 } from 'lucide-react';
 
 interface WorkoutActiveScreenProps {
@@ -75,7 +74,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
   useEffect(() => {
     const timer = setTimeout(() => {
       start();
-    }, 400);
+    }, 300);
     return () => clearTimeout(timer);
   }, [start]);
 
@@ -157,7 +156,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col bg-black text-white select-none transition-all duration-150 overflow-hidden ${flashStyle}`}
+      className={`fixed inset-0 z-50 flex flex-col bg-black text-white transition-all duration-150 overflow-hidden ${flashStyle}`}
     >
       {/* ========================================================
           PORTRAIT LAYOUT (Default mobile phone orientation)
@@ -181,16 +180,16 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95"
+                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Sound"
               >
-                {soundEnabled ? <Volume2 className="w-4 h-4 text-green-400" /> : <VolumeX className="w-4 h-4 text-neutral-500" />}
+                {soundEnabled ? <Volume2 className="w-5 h-5 text-green-400" /> : <VolumeX className="w-5 h-5 text-neutral-500" />}
               </button>
 
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95"
+                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Fullscreen"
               >
                 {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -199,10 +198,10 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={onExit}
-                className="w-9 h-9 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95"
+                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Exit Workout"
               >
-                <X className="w-4 h-4 text-red-400" />
+                <X className="w-5 h-5 text-red-400" />
               </button>
             </div>
 
@@ -215,9 +214,10 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             </div>
           </header>
 
-          {/* Center Main Stage (Colored Box with Huge Digits) */}
+          {/* Center Main Stage (Click anywhere to Toggle Play/Pause!) */}
           <main
-            className="flex-1 flex flex-col items-center justify-between p-4 relative overflow-hidden transition-colors duration-300"
+            onClick={togglePause}
+            className="flex-1 flex flex-col items-center justify-between p-4 relative overflow-hidden transition-colors duration-300 cursor-pointer"
             style={{ backgroundColor: bgColor }}
           >
             {/* Background Chevrons */}
@@ -258,18 +258,26 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               >
                 {formatSecondsToMMSS(stepRemainingSeconds)}
               </div>
+              {isPaused && (
+                <div className="mt-2 px-3 py-1 rounded-full bg-black/30 text-white font-black text-xs uppercase tracking-widest animate-pulse">
+                  PAUSED (TAP TO RESUME)
+                </div>
+              )}
             </div>
 
             {/* In-Phase Quick Navigation (Rewind & Skip) */}
-            <div className="w-full max-w-sm flex items-center justify-between px-6 pb-2 z-10">
+            <div
+              className="w-full max-w-sm flex items-center justify-between px-6 pb-2 z-10"
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 type="button"
                 onClick={skipBackward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-90 transition backdrop-blur-sm"
+                className="p-4 rounded-full bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm cursor-pointer"
                 style={{ color: textColor }}
                 title="Rewind / Previous"
               >
-                <SkipBack className="w-6 h-6" />
+                <SkipBack className="w-7 h-7" />
               </button>
 
               <span
@@ -282,11 +290,11 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={skipForward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-90 transition backdrop-blur-sm"
+                className="p-4 rounded-full bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm cursor-pointer"
                 style={{ color: textColor }}
                 title="Skip to Next"
               >
-                <SkipForward className="w-6 h-6" />
+                <SkipForward className="w-7 h-7" />
               </button>
             </div>
           </main>
@@ -338,7 +346,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             <button
               type="button"
               onClick={togglePause}
-              className={`w-18 h-18 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-xl ${
+              className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-xl cursor-pointer ${
                 isPlaying
                   ? 'bg-neutral-900 border-2 border-neutral-700 hover:border-neutral-500 text-green-400 shadow-green-950/40'
                   : 'bg-green-500 border-2 border-green-400 text-black shadow-green-500/40 scale-105'
@@ -346,9 +354,9 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               aria-label={isPlaying ? 'Pause Workout' : 'Start Workout'}
             >
               {isPlaying ? (
-                <Pause className="w-8 h-8 fill-green-400 text-green-400" />
+                <Pause className="w-9 h-9 fill-green-400 text-green-400" />
               ) : (
-                <Play className="w-9 h-9 fill-black text-black ml-1" />
+                <Play className="w-10 h-10 fill-black text-black ml-1" />
               )}
             </button>
 
@@ -371,7 +379,8 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
         <div className="flex h-full w-full">
           {/* Left Large Timer Stage */}
           <div
-            className="flex-1 flex flex-col justify-between p-6 relative overflow-hidden transition-colors duration-300"
+            onClick={togglePause}
+            className="flex-1 flex flex-col justify-between p-6 relative overflow-hidden transition-colors duration-300 cursor-pointer"
             style={{ backgroundColor: bgColor }}
           >
             {/* Chevrons */}
@@ -383,7 +392,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             />
 
             {/* Landscape Top Bar */}
-            <div className="flex items-center justify-between w-full z-10">
+            <div className="flex items-center justify-between w-full z-10" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center gap-3">
                 <span
                   className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-black/15"
@@ -421,11 +430,11 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             </div>
 
             {/* In-Phase Navigation */}
-            <div className="flex items-center justify-between w-full z-10 px-4">
+            <div className="flex items-center justify-between w-full z-10 px-4" onClick={(e) => e.stopPropagation()}>
               <button
                 type="button"
                 onClick={skipBackward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition"
+                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
                 style={{ color: textColor }}
               >
                 <SkipBack className="w-7 h-7" />
@@ -441,7 +450,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={skipForward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition"
+                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
                 style={{ color: textColor }}
               >
                 <SkipForward className="w-7 h-7" />
@@ -456,7 +465,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-2 rounded-lg bg-neutral-900 text-neutral-300 hover:text-white"
+                className="p-2.5 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
               >
                 {soundEnabled ? <Volume2 className="w-5 h-5 text-green-400" /> : <VolumeX className="w-5 h-5 text-neutral-500" />}
               </button>
@@ -464,7 +473,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="p-2 rounded-lg bg-neutral-900 text-neutral-300 hover:text-white"
+                className="p-2.5 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
               >
                 {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
               </button>
@@ -472,7 +481,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={onExit}
-                className="p-2 rounded-lg bg-neutral-900 text-red-400 hover:text-red-300"
+                className="p-2.5 rounded-xl bg-neutral-900 text-red-400 hover:text-red-300 cursor-pointer active:scale-95"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -483,7 +492,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={togglePause}
-                className={`w-24 h-24 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-2xl ${
+                className={`w-24 h-24 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-2xl cursor-pointer ${
                   isPlaying
                     ? 'bg-neutral-900 border-2 border-neutral-700 text-green-400'
                     : 'bg-green-500 border-2 border-green-400 text-black scale-105'
@@ -571,7 +580,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
                   reset();
                   start();
                 }}
-                className="w-full py-3.5 bg-neutral-800 hover:bg-neutral-700 text-white rounded-2xl font-bold transition active:scale-95 flex items-center justify-center gap-2"
+                className="w-full py-4 bg-neutral-800 hover:bg-neutral-700 text-white rounded-2xl font-bold transition active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
               >
                 <RotateCcw className="w-4 h-4" />
                 Repeat Workout
@@ -580,7 +589,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={onExit}
-                className="w-full py-3.5 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-black uppercase tracking-wide transition active:scale-95 shadow-lg shadow-green-500/20"
+                className="w-full py-4 bg-green-500 hover:bg-green-400 text-black rounded-2xl font-black uppercase tracking-wide transition active:scale-95 shadow-lg shadow-green-500/20 cursor-pointer"
               >
                 Back to Workouts
               </button>

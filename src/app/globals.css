@@ -5,15 +5,12 @@
   --foreground: #ffffff;
 }
 
-body {
+html, body {
   background: #000000;
   color: #ffffff;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  -webkit-user-select: none;
-  overflow-x: hidden;
+  min-height: 100%;
 }
 
 /* Authentic chevron pattern used in Timer Plus */
@@ -43,6 +40,8 @@ body {
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.04em;
   line-height: 0.9;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* Safe areas for iPhone dynamic island and home bar */
