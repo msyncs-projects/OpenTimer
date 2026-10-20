@@ -162,14 +162,14 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
       {!isLandscape ? (
         <div className="flex flex-col h-full w-full">
           {/* Top Header: High-visibility Total Time & Controls */}
-          <header className="safe-top bg-black/95 px-5 py-3 flex items-center justify-between border-b border-white/10 z-20">
-            {/* Total Remaining Time (MASSIVE & PROMINENT) */}
+          <header className="safe-top bg-black/95 px-5 py-3.5 flex items-center justify-between border-b border-white/10 z-20">
+            {/* Total Remaining Time (EXTRA LARGE & PROMINENT) */}
             <div className="flex items-center gap-3">
               <div className="flex flex-col">
-                <span className="text-[11px] font-black uppercase tracking-widest text-neutral-400 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-neutral-400" /> TOTAL
+                <span className="text-xs font-black uppercase tracking-widest text-neutral-400 flex items-center gap-1.5">
+                  <Clock className="w-4 h-4 text-neutral-400" /> TOTAL TIME
                 </span>
-                <span className="text-2xl sm:text-3xl font-black tracking-tight text-white tabular-nums leading-none mt-0.5">
+                <span className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white tabular-nums leading-none mt-1">
                   {formatSecondsToMMSS(totalRemainingSeconds)}
                 </span>
               </div>
@@ -291,23 +291,23 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             </div>
           </main>
 
-          {/* "UP NEXT" Ribbon (High Contrast, Bold Text & Time) */}
+          {/* "UP NEXT" Ribbon (EXTRA LARGE & HIGH CONTRAST) */}
           <div
-            className="w-full py-3 px-5 flex items-center justify-between relative overflow-hidden transition-colors duration-300 border-t border-black/20 z-10"
+            className="w-full py-4 sm:py-5 px-6 flex items-center justify-between relative overflow-hidden transition-colors duration-300 border-t-2 border-black/25 z-10"
             style={{ backgroundColor: nextBgColor }}
           >
             {/* Ribbon Chevrons */}
             <div className="absolute inset-0 pointer-events-none opacity-30 bg-chevrons" />
 
-            <div className="flex items-center gap-2.5 z-10">
+            <div className="flex items-center gap-3 z-10 min-w-0">
               <span
-                className="text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded bg-black/20"
+                className="text-xs sm:text-sm font-black uppercase tracking-widest px-3 py-1 rounded-lg bg-black/25 shrink-0"
                 style={{ color: nextTextColor }}
               >
                 UP NEXT
               </span>
               <span
-                className="text-base sm:text-lg font-black uppercase tracking-tight"
+                className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight truncate"
                 style={{ color: nextTextColor }}
               >
                 {nextStep ? nextStep.title : 'WORKOUT COMPLETE'}
@@ -315,7 +315,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             </div>
 
             <span
-              className="text-lg sm:text-xl font-black tabular-nums z-10"
+              className="text-2xl sm:text-3xl md:text-4xl font-black tabular-nums font-mono z-10 shrink-0 ml-4"
               style={{ color: nextTextColor }}
             >
               {nextStep ? formatSecondsToMMSS(nextStep.durationSeconds) : '00:00'}
@@ -401,10 +401,10 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               </div>
 
               <div className="flex flex-col items-end">
-                <span className="text-[11px] font-black uppercase tracking-widest opacity-80" style={{ color: textColor }}>
+                <span className="text-xs font-black uppercase tracking-widest opacity-80" style={{ color: textColor }}>
                   TOTAL TIME
                 </span>
-                <span className="text-2xl sm:text-3xl font-black tabular-nums leading-none mt-0.5" style={{ color: textColor }}>
+                <span className="text-3xl sm:text-4xl font-black tabular-nums leading-none mt-1" style={{ color: textColor }}>
                   {formatSecondsToMMSS(totalRemainingSeconds)}
                 </span>
               </div>
@@ -506,12 +506,12 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             {/* Next Ribbon & Cycles */}
             <div className="space-y-4 pt-4 border-t border-neutral-800">
               <div
-                className="p-3.5 rounded-2xl text-center font-black uppercase text-xs shadow"
+                className="p-4 rounded-2xl text-center font-black uppercase shadow-lg"
                 style={{ backgroundColor: nextBgColor, color: nextTextColor }}
               >
-                <div className="text-[10px] opacity-80">UP NEXT</div>
-                <div className="text-base font-black">{nextStep?.title || 'FINISH'}</div>
-                <div className="text-sm font-black tabular-nums font-mono">
+                <div className="text-[11px] opacity-80 mb-0.5">UP NEXT</div>
+                <div className="text-xl sm:text-2xl font-black">{nextStep?.title || 'FINISH'}</div>
+                <div className="text-base font-black tabular-nums font-mono mt-0.5">
                   {nextStep ? formatSecondsToMMSS(nextStep.durationSeconds) : '00:00'}
                 </div>
               </div>
