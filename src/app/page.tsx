@@ -1,69 +1,241 @@
-import Image from "next/image";
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { Workout, WorkoutLog } from '@/types/workout';
+import {
+  DEFAULT_WORKOUTS,
+  loadWorkouts,
+  saveSingleWorkout,
+  deleteWorkout,
+  duplicateWorkout,
+  loadWorkoutLogs,
+  saveWorkoutLog,
+  clearWorkoutLogs,
+  decodeWorkoutFromUrl,
+} from '@/lib/storage';
+import { WorkoutListView } from '@/components/WorkoutListView';
+import { WorkoutActiveScreen } from '@/components/WorkoutActiveScreen';
+import { WorkoutBuilderModal } from '@/components/WorkoutBuilderModal';
+import { WorkoutHistoryView } from '@/components/WorkoutHistoryView';
+import { ShareModal } from '@/components/ShareModal';
+import { unlockAudio } from '@/lib/audio';
+import { Dumbbell, History, Share2, Plus, Sparkles, Smartphone } from 'lucide-react';
 
 export default function Home() {
+  const [workouts, setWorkouts] = useState<Workout[]>(DEFAULT_WORKOUTS);
+  const [logs, setLogs] = useState<WorkoutLog[]>([]);
+  const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
+  const [builderWorkout, setBuilderWorkout] = useState<Workout | null | undefined>(undefined); // null = new, Workout = edit, undefined = closed
+  const [shareWorkout, setShareWorkout] = useState<Workout | null | undefined>(undefined);
+  const [activeTab, setActiveTab] = useState<'timers' | 'history'>('timers');
+  const [showPwaBanner, setShowPwaBanner] = useState(false);
+
+  // Initialize on mount
+  useEffect(() => {
+    const loaded = loadWorkouts();
+    setWorkouts(loaded);
+    setLogs(loadWorkoutLogs());
+
+    // Check for shared workout in URL
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const sharedCode = params.get('w');
+      if (sharedCode) {
+        const decoded = decodeWorkoutFromUrl(sharedCode);
+        if (decoded) {
+          const updated = saveSingleWorkout(decoded);
+          setWorkouts(updated);
+          // Clean URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+          // Automatically prompt or start
+          setActiveWorkout(decoded);
+        }
+      }
+
+      // Check if not running standalone (show mobile Add to Home Screen tip)
+      const isStandalone =
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as unknown as { standalone?: boolean }).standalone === true;
+      if (!isStandalone && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        setShowPwaBanner(true);
+      }
+    }
+  }, []);
+
+  // Handlers
+  const handleStartWorkout = (workout: Workout) => {
+    unlockAudio();
+    setActiveWorkout(workout);
+  };
+
+  const handleFinishWorkout = (totalSeconds: number) => {
+    if (!activeWorkout) return;
+    const log: WorkoutLog = {
+      id: `log_${Date.now()}`,
+      workoutId: activeWorkout.id,
+      workoutName: activeWorkout.name,
+      completedAt: Date.now(),
+      totalDurationSeconds: totalSeconds,
+      cyclesCompleted: activeWorkout.cycles,
+      roundsCompleted: activeWorkout.rounds.length * (activeWorkout.rounds[0]?.repeats || 1),
+    };
+    saveWorkoutLog(log);
+    setLogs(loadWorkoutLogs());
+  };
+
+  const handleSaveWorkout = (saved: Workout) => {
+    const updated = saveSingleWorkout(saved);
+    setWorkouts(updated);
+    setBuilderWorkout(undefined);
+  };
+
+  const handleDeleteWorkout = (id: string) => {
+    if (confirm('Are you sure you want to delete this timer?')) {
+      const updated = deleteWorkout(id);
+      setWorkouts(updated);
+    }
+  };
+
+  const handleDuplicateWorkout = (workout: Workout) => {
+    const copy = duplicateWorkout(workout);
+    const updated = saveSingleWorkout(copy);
+    setWorkouts(updated);
+  };
+
+  const handleClearHistory = () => {
+    if (confirm('Are you sure you want to clear your workout history?')) {
+      clearWorkoutLogs();
+      setLogs([]);
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main className="min-h-full h-full flex flex-col bg-black text-white relative overflow-y-auto">
+      {/* Top Header Bar */}
+      <header className="safe-top sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3 border-b border-neutral-800 flex items-center justify-between">
+        {/* App Logo & Branding */}
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black text-lg shadow-md shadow-green-500/20">
+            +
+          </div>
+          <div>
+            <span className="text-base font-black tracking-tight text-white">TIMER</span>
+            <span className="text-base font-black tracking-tight text-green-400">PLUS</span>
+          </div>
+        </div>
+
+        {/* Top Right Action: Share/Import */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShareWorkout(workouts[0] || null)}
+            className="px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-bold active:scale-95 transition"
+            title="Share & Backup"
+          >
+            <Share2 className="w-3.5 h-3.5 text-green-400" />
+            <span className="hidden sm:inline">Backup</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="flex-1 w-full max-w-xl mx-auto px-4 py-4">
+        {/* Mobile PWA Install Reminder (dismissible) */}
+        {showPwaBanner && (
+          <div className="mb-4 p-3 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-lg">
+            <div className="flex items-center gap-2 text-neutral-300">
+              <Smartphone className="w-4 h-4 text-green-400 shrink-0" />
+              <span>
+                Tip: Tap <strong className="text-white">Share → Add to Home Screen</strong> for the full standalone app experience!
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowPwaBanner(false)}
+              className="text-neutral-500 hover:text-white px-2 py-1 font-bold"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* Tab Selector */}
+        <div className="grid grid-cols-2 gap-2 p-1.5 bg-neutral-900 rounded-2xl border border-neutral-800 mb-4">
+          <button
+            type="button"
+            onClick={() => setActiveTab('timers')}
+            className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition ${
+              activeTab === 'timers'
+                ? 'bg-neutral-800 text-white shadow'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <Dumbbell className="w-4 h-4 text-green-400" />
+            Timers ({workouts.length})
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('history')}
+            className={`py-2 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition ${
+              activeTab === 'history'
+                ? 'bg-neutral-800 text-white shadow'
+                : 'text-neutral-400 hover:text-white'
+            }`}
+          >
+            <History className="w-4 h-4 text-amber-400" />
+            Journal ({logs.length})
+          </button>
+        </div>
+
+        {/* Tab Content */}
+        {activeTab === 'timers' ? (
+          <WorkoutListView
+            workouts={workouts}
+            onStart={handleStartWorkout}
+            onEdit={(w) => setBuilderWorkout(w)}
+            onDuplicate={handleDuplicateWorkout}
+            onDelete={handleDeleteWorkout}
+            onShare={(w) => setShareWorkout(w)}
+            onCreateNew={() => setBuilderWorkout(null)}
+          />
+        ) : (
+          <WorkoutHistoryView logs={logs} onClear={handleClearHistory} />
+        )}
+      </div>
+
+      {/* ========================================================
+          ACTIVE WORKOUT SCREEN (Full Screen Workout Experience)
+         ======================================================== */}
+      {activeWorkout && (
+        <WorkoutActiveScreen
+          workout={activeWorkout}
+          onExit={() => setActiveWorkout(null)}
+          onFinish={handleFinishWorkout}
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      )}
+
+      {/* ========================================================
+          WORKOUT BUILDER MODAL (Create & Edit Timers)
+         ======================================================== */}
+      {builderWorkout !== undefined && (
+        <WorkoutBuilderModal
+          initialWorkout={builderWorkout}
+          onSave={handleSaveWorkout}
+          onClose={() => setBuilderWorkout(undefined)}
+        />
+      )}
+
+      {/* ========================================================
+          SHARE / IMPORT MODAL
+         ======================================================== */}
+      {shareWorkout !== undefined && (
+        <ShareModal
+          workout={shareWorkout}
+          onImportSuccess={() => setWorkouts(loadWorkouts())}
+          onClose={() => setShareWorkout(undefined)}
+        />
+      )}
+    </main>
   );
 }
