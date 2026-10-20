@@ -17,7 +17,6 @@ import {
   Play,
   Pause,
   X,
-  Heart,
   Flame,
   Award,
   Clock,
@@ -45,7 +44,6 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
     repeatsLeft,
     cyclesLeft,
     screenFlash,
-    simulatedBpm,
     soundEnabled,
     setSoundEnabled,
     start,
@@ -57,8 +55,8 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
     // Launch celebratory confetti
     try {
       confetti({
-        particleCount: 120,
-        spread: 80,
+        particleCount: 150,
+        spread: 90,
         origin: { y: 0.6 },
       });
     } catch {
@@ -156,31 +154,29 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col bg-black text-white transition-all duration-150 overflow-hidden ${flashStyle}`}
+      className={`fixed inset-0 z-50 flex flex-col bg-black text-white select-none transition-all duration-150 overflow-hidden ${flashStyle}`}
     >
       {/* ========================================================
-          PORTRAIT LAYOUT (Default mobile phone orientation)
+          PORTRAIT LAYOUT (Optimized for Distance Reading & Visibility)
          ======================================================== */}
       {!isLandscape ? (
         <div className="flex flex-col h-full w-full">
-          {/* Top Black Header */}
-          <header className="safe-top bg-black/95 px-4 py-2.5 flex items-center justify-between border-b border-white/10 z-20">
-            {/* Heart Rate / Stats */}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-neutral-900 border border-neutral-800">
-                <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
-                <span className="text-xs font-black tracking-tight text-white tabular-nums">
-                  {simulatedBpm} <span className="text-[10px] text-neutral-400 font-medium">BPM</span>
-                </span>
-              </div>
+          {/* Top Header: High-visibility Total Time & Controls */}
+          <header className="safe-top bg-black/95 px-5 py-3 flex items-center justify-between border-b border-white/10 z-20">
+            {/* Total Remaining Time (BIGGER & CLEAR) */}
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-800">
+              <Clock className="w-4 h-4 text-neutral-400" />
+              <span className="text-sm font-black tracking-tight text-white tabular-nums">
+                TOTAL: {formatSecondsToMMSS(totalRemainingSeconds)}
+              </span>
             </div>
 
-            {/* Quick Actions */}
-            <div className="flex items-center gap-2">
+            {/* Quick Actions (Large Tap Targets) */}
+            <div className="flex items-center gap-2.5">
               <button
                 type="button"
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Sound"
               >
                 {soundEnabled ? <Volume2 className="w-5 h-5 text-green-400" /> : <VolumeX className="w-5 h-5 text-neutral-500" />}
@@ -189,35 +185,27 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Fullscreen"
               >
-                {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+                {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
               </button>
 
               <button
                 type="button"
                 onClick={onExit}
-                className="w-10 h-10 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
+                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-red-400 hover:text-red-300 transition active:scale-95 cursor-pointer"
                 aria-label="Exit Workout"
               >
-                <X className="w-5 h-5 text-red-400" />
+                <X className="w-5 h-5 stroke-[2.5]" />
               </button>
-            </div>
-
-            {/* Total Remaining Time */}
-            <div className="flex items-center gap-1 px-3 py-1 rounded-full bg-neutral-900 border border-neutral-800">
-              <Clock className="w-3.5 h-3.5 text-neutral-400" />
-              <span className="text-xs font-bold tracking-tight text-neutral-200 tabular-nums">
-                {formatSecondsToMMSS(totalRemainingSeconds)}
-              </span>
             </div>
           </header>
 
-          {/* Center Main Stage (Click anywhere to Toggle Play/Pause!) */}
+          {/* Center Main Stage (Giant Numbers & Ultra-Legible Phase Name) */}
           <main
             onClick={togglePause}
-            className="flex-1 flex flex-col items-center justify-between p-4 relative overflow-hidden transition-colors duration-300 cursor-pointer"
+            className="flex-1 flex flex-col items-center justify-between p-4 sm:p-6 relative overflow-hidden transition-colors duration-300 cursor-pointer"
             style={{ backgroundColor: bgColor }}
           >
             {/* Background Chevrons */}
@@ -228,44 +216,44 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               }}
             />
 
-            {/* Top Phase Title & Subtitle */}
-            <div className="w-full text-center pt-2 z-10">
+            {/* Top Phase Header: Bold, Huge Phase Title */}
+            <div className="w-full text-center pt-1 z-10">
               <span
-                className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-black/10 inline-block mb-1"
+                className="text-xs sm:text-sm font-black tracking-widest uppercase px-4 py-1 rounded-full bg-black/15 inline-block mb-1.5"
                 style={{ color: textColor }}
               >
                 {workout.name}
               </span>
               <h1
-                className="text-3xl sm:text-4xl font-black tracking-tight uppercase"
+                className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight uppercase"
                 style={{ color: textColor }}
               >
                 {currentStep?.title || 'WORK'}
               </h1>
               <p
-                className="text-xs sm:text-sm font-semibold opacity-75 mt-0.5 tracking-wide"
+                className="text-sm sm:text-base font-bold opacity-80 mt-1 tracking-wide"
                 style={{ color: textColor }}
               >
                 {currentStep?.subtitle}
               </p>
             </div>
 
-            {/* Giant Countdown Digits */}
-            <div className="my-auto text-center z-10 flex flex-col items-center justify-center">
+            {/* MASSIVE COUNTDOWN DIGITS (Visible from across the room!) */}
+            <div className="my-auto text-center z-10 flex flex-col items-center justify-center w-full">
               <div
-                className="timer-digits font-black tracking-tighter leading-none select-none text-[28vw] sm:text-[130px] md:text-[160px]"
+                className="timer-digits font-black tracking-tighter leading-none select-none text-[32vw] sm:text-[150px] md:text-[200px]"
                 style={{ color: textColor }}
               >
                 {formatSecondsToMMSS(stepRemainingSeconds)}
               </div>
               {isPaused && (
-                <div className="mt-2 px-3 py-1 rounded-full bg-black/30 text-white font-black text-xs uppercase tracking-widest animate-pulse">
-                  PAUSED (TAP TO RESUME)
+                <div className="mt-3 px-4 py-1.5 rounded-full bg-black/40 text-white font-black text-sm uppercase tracking-widest animate-pulse backdrop-blur-sm">
+                  PAUSED (TAP SCREEN TO RESUME)
                 </div>
               )}
             </div>
 
-            {/* In-Phase Quick Navigation (Rewind & Skip) */}
+            {/* In-Phase Quick Navigation (Big Rewind & Skip Buttons) */}
             <div
               className="w-full max-w-sm flex items-center justify-between px-6 pb-2 z-10"
               onClick={(e) => e.stopPropagation()}
@@ -273,99 +261,99 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={skipBackward}
-                className="p-4 rounded-full bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm cursor-pointer"
+                className="w-14 h-14 rounded-2xl bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm flex items-center justify-center cursor-pointer shadow-md"
                 style={{ color: textColor }}
-                title="Rewind / Previous"
+                title="Rewind / Previous Set"
               >
-                <SkipBack className="w-7 h-7" />
+                <SkipBack className="w-8 h-8" />
               </button>
 
               <span
-                className="text-xs font-bold uppercase tracking-widest opacity-60"
+                className="text-sm font-black uppercase tracking-widest opacity-70"
                 style={{ color: textColor }}
               >
-                {currentStep ? `Interval ${currentStep.stepIndex + 1}/${workout.rounds.length * (workout.rounds[0]?.repeats || 1)}` : ''}
+                {currentStep ? `Set ${currentStep.repeatIndex}/${currentStep.totalRepeats}` : ''}
               </span>
 
               <button
                 type="button"
                 onClick={skipForward}
-                className="p-4 rounded-full bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm cursor-pointer"
+                className="w-14 h-14 rounded-2xl bg-black/20 hover:bg-black/30 active:scale-90 transition backdrop-blur-sm flex items-center justify-center cursor-pointer shadow-md"
                 style={{ color: textColor }}
-                title="Skip to Next"
+                title="Skip to Next Set"
               >
-                <SkipForward className="w-7 h-7" />
+                <SkipForward className="w-8 h-8" />
               </button>
             </div>
           </main>
 
-          {/* "UP NEXT" Ribbon (Authentic Timer Plus Style) */}
+          {/* "UP NEXT" Ribbon (High Contrast, Bold Text & Time) */}
           <div
-            className="w-full py-2.5 px-4 flex items-center justify-between relative overflow-hidden transition-colors duration-300 border-t border-black/20 z-10"
+            className="w-full py-3 px-5 flex items-center justify-between relative overflow-hidden transition-colors duration-300 border-t border-black/20 z-10"
             style={{ backgroundColor: nextBgColor }}
           >
             {/* Ribbon Chevrons */}
             <div className="absolute inset-0 pointer-events-none opacity-30 bg-chevrons" />
 
-            <div className="flex items-center gap-2 z-10">
+            <div className="flex items-center gap-2.5 z-10">
               <span
-                className="text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded bg-black/20"
+                className="text-xs font-black uppercase tracking-widest px-2.5 py-1 rounded bg-black/20"
                 style={{ color: nextTextColor }}
               >
                 UP NEXT
               </span>
               <span
-                className="text-sm font-black uppercase tracking-tight"
+                className="text-base sm:text-lg font-black uppercase tracking-tight"
                 style={{ color: nextTextColor }}
               >
-                {nextStep ? nextStep.title : 'FINISH'}
+                {nextStep ? nextStep.title : 'WORKOUT COMPLETE'}
               </span>
             </div>
 
             <span
-              className="text-sm font-black tabular-nums z-10"
+              className="text-lg sm:text-xl font-black tabular-nums z-10"
               style={{ color: nextTextColor }}
             >
               {nextStep ? formatSecondsToMMSS(nextStep.durationSeconds) : '00:00'}
             </span>
           </div>
 
-          {/* Bottom Black Control Dock */}
+          {/* Bottom Black Control Dock (MUCH BIGGER NUMBERS & BUTTONS) */}
           <footer className="safe-bottom bg-neutral-950 px-6 py-4 flex items-center justify-between border-t border-neutral-900 z-20">
-            {/* Left: Repeats Left */}
-            <div className="flex flex-col items-center min-w-[70px]">
-              <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400">
+            {/* Left: Repeats Left (BIG NUMBER) */}
+            <div className="flex flex-col items-center min-w-[80px]">
+              <span className="text-xs font-black uppercase tracking-widest text-neutral-400">
                 REPEATS LEFT
               </span>
-              <span className="text-3xl font-black text-blue-500 tabular-nums">
+              <span className="text-4xl sm:text-5xl font-black text-blue-400 tabular-nums leading-tight">
                 {repeatsLeft}
               </span>
             </div>
 
-            {/* Center: Big Square Pause / Resume Button */}
+            {/* Center: Extra Large Play / Pause Button */}
             <button
               type="button"
               onClick={togglePause}
-              className={`w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-xl cursor-pointer ${
+              className={`w-22 h-22 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-2xl cursor-pointer ${
                 isPlaying
-                  ? 'bg-neutral-900 border-2 border-neutral-700 hover:border-neutral-500 text-green-400 shadow-green-950/40'
-                  : 'bg-green-500 border-2 border-green-400 text-black shadow-green-500/40 scale-105'
+                  ? 'bg-neutral-900 border-2 border-neutral-700 hover:border-neutral-500 text-green-400 shadow-green-950/50'
+                  : 'bg-green-500 border-2 border-green-300 text-black shadow-green-500/50 scale-105'
               }`}
               aria-label={isPlaying ? 'Pause Workout' : 'Start Workout'}
             >
               {isPlaying ? (
-                <Pause className="w-9 h-9 fill-green-400 text-green-400" />
+                <Pause className="w-10 h-10 fill-green-400 text-green-400" />
               ) : (
-                <Play className="w-10 h-10 fill-black text-black ml-1" />
+                <Play className="w-11 h-11 fill-black text-black ml-1.5" />
               )}
             </button>
 
-            {/* Right: Cycles Left */}
-            <div className="flex flex-col items-center min-w-[70px]">
-              <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400">
+            {/* Right: Cycles Left (BIG NUMBER) */}
+            <div className="flex flex-col items-center min-w-[80px]">
+              <span className="text-xs font-black uppercase tracking-widest text-neutral-400">
                 CYCLES LEFT
               </span>
-              <span className="text-3xl font-black text-amber-400 tabular-nums">
+              <span className="text-4xl sm:text-5xl font-black text-amber-400 tabular-nums leading-tight">
                 {cyclesLeft}
               </span>
             </div>
@@ -373,14 +361,14 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
         </div>
       ) : (
         /* ========================================================
-           LANDSCAPE SCOREBOARD LAYOUT (Phone sideways / iPad / Gym TV)
+           LANDSCAPE SCOREBOARD LAYOUT (Phone Sideways / Gym Board)
            Matching screenshot timerplus_0.png!
            ======================================================== */
         <div className="flex h-full w-full">
           {/* Left Large Timer Stage */}
           <div
             onClick={togglePause}
-            className="flex-1 flex flex-col justify-between p-6 relative overflow-hidden transition-colors duration-300 cursor-pointer"
+            className="flex-1 flex flex-col justify-between p-6 sm:p-8 relative overflow-hidden transition-colors duration-300 cursor-pointer"
             style={{ backgroundColor: bgColor }}
           >
             {/* Chevrons */}
@@ -395,34 +383,28 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             <div className="flex items-center justify-between w-full z-10" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center gap-3">
                 <span
-                  className="text-xs font-black tracking-widest uppercase px-3 py-1 rounded-full bg-black/15"
+                  className="text-xs sm:text-sm font-black tracking-widest uppercase px-3.5 py-1 rounded-full bg-black/15"
                   style={{ color: textColor }}
                 >
                   {workout.name}
                 </span>
                 <span
-                  className="text-2xl font-black tracking-tight uppercase"
+                  className="text-3xl sm:text-4xl font-black tracking-tight uppercase"
                   style={{ color: textColor }}
                 >
                   {currentStep?.title || 'WORK'}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/15 font-black text-xs">
-                  <Heart className="w-4 h-4 text-red-500 fill-red-500 animate-pulse" />
-                  <span style={{ color: textColor }}>{simulatedBpm} BPM</span>
-                </div>
-                <div className="px-3 py-1 rounded-full bg-black/15 font-black text-xs tabular-nums" style={{ color: textColor }}>
-                  {formatSecondsToMMSS(totalRemainingSeconds)}
-                </div>
+              <div className="px-4 py-1.5 rounded-full bg-black/15 font-black text-sm sm:text-base tabular-nums" style={{ color: textColor }}>
+                TOTAL REMAINING: {formatSecondsToMMSS(totalRemainingSeconds)}
               </div>
             </div>
 
             {/* Giant Digits */}
             <div className="my-auto text-center z-10">
               <div
-                className="timer-digits font-black tracking-tighter leading-none select-none text-[22vw]"
+                className="timer-digits font-black tracking-tighter leading-none select-none text-[26vw]"
                 style={{ color: textColor }}
               >
                 {formatSecondsToMMSS(stepRemainingSeconds)}
@@ -434,14 +416,14 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={skipBackward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
+                className="p-4 rounded-2xl bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
                 style={{ color: textColor }}
               >
-                <SkipBack className="w-7 h-7" />
+                <SkipBack className="w-8 h-8" />
               </button>
 
               <span
-                className="text-xs font-bold uppercase tracking-widest opacity-70"
+                className="text-sm font-black uppercase tracking-widest opacity-80"
                 style={{ color: textColor }}
               >
                 {currentStep?.subtitle}
@@ -450,86 +432,86 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={skipForward}
-                className="p-3 rounded-full bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
+                className="p-4 rounded-2xl bg-black/15 hover:bg-black/25 active:scale-95 transition cursor-pointer"
                 style={{ color: textColor }}
               >
-                <SkipForward className="w-7 h-7" />
+                <SkipForward className="w-8 h-8" />
               </button>
             </div>
           </div>
 
-          {/* Right Vertical Control Panel (Authentic Timer Plus Landscape Sidebar) */}
-          <aside className="w-48 sm:w-56 bg-neutral-950 flex flex-col justify-between border-l border-neutral-800 p-4 z-20">
+          {/* Right Vertical Control Panel */}
+          <aside className="w-56 sm:w-64 bg-neutral-950 flex flex-col justify-between border-l border-neutral-800 p-5 z-20">
             {/* Top Controls */}
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
               <button
                 type="button"
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-2.5 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
+                className="p-3 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
               >
-                {soundEnabled ? <Volume2 className="w-5 h-5 text-green-400" /> : <VolumeX className="w-5 h-5 text-neutral-500" />}
+                {soundEnabled ? <Volume2 className="w-6 h-6 text-green-400" /> : <VolumeX className="w-6 h-6 text-neutral-500" />}
               </button>
 
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="p-2.5 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
+                className="p-3 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
               >
-                {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                {isFullscreen ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
               </button>
 
               <button
                 type="button"
                 onClick={onExit}
-                className="p-2.5 rounded-xl bg-neutral-900 text-red-400 hover:text-red-300 cursor-pointer active:scale-95"
+                className="p-3 rounded-xl bg-neutral-900 text-red-400 hover:text-red-300 cursor-pointer active:scale-95"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6 stroke-[2.5]" />
               </button>
             </div>
 
             {/* Big Play / Pause Button in Landscape */}
-            <div className="my-auto flex flex-col items-center gap-4">
+            <div className="my-auto flex flex-col items-center gap-5">
               <button
                 type="button"
                 onClick={togglePause}
-                className={`w-24 h-24 rounded-2xl flex items-center justify-center transition active:scale-95 shadow-2xl cursor-pointer ${
+                className={`w-28 h-28 rounded-3xl flex items-center justify-center transition active:scale-95 shadow-2xl cursor-pointer ${
                   isPlaying
-                    ? 'bg-neutral-900 border-2 border-neutral-700 text-green-400'
-                    : 'bg-green-500 border-2 border-green-400 text-black scale-105'
+                    ? 'bg-neutral-900 border-2 border-neutral-700 text-green-400 shadow-green-950/50'
+                    : 'bg-green-500 border-2 border-green-300 text-black scale-105 shadow-green-500/50'
                 }`}
               >
-                {isPlaying ? <Pause className="w-10 h-10 fill-green-400" /> : <Play className="w-10 h-10 fill-black ml-1" />}
+                {isPlaying ? <Pause className="w-12 h-12 fill-green-400" /> : <Play className="w-14 h-14 fill-black ml-1.5" />}
               </button>
 
               {/* Repeats Left Badge */}
               <div className="text-center">
-                <div className="text-[10px] font-black uppercase tracking-widest text-neutral-400">
+                <div className="text-xs font-black uppercase tracking-widest text-neutral-400">
                   REPEATS LEFT
                 </div>
-                <div className="text-3xl font-black text-blue-500 tabular-nums">
+                <div className="text-4xl sm:text-5xl font-black text-blue-400 tabular-nums">
                   {repeatsLeft}
                 </div>
               </div>
             </div>
 
             {/* Next Ribbon & Cycles */}
-            <div className="space-y-3 pt-3 border-t border-neutral-800">
+            <div className="space-y-4 pt-4 border-t border-neutral-800">
               <div
-                className="p-2.5 rounded-xl text-center font-black uppercase text-xs shadow"
+                className="p-3 rounded-2xl text-center font-black uppercase text-xs shadow"
                 style={{ backgroundColor: nextBgColor, color: nextTextColor }}
               >
-                <div className="text-[9px] opacity-80">UP NEXT</div>
-                <div>{nextStep?.title || 'FINISH'}</div>
-                <div className="text-[11px] tabular-nums font-mono">
+                <div className="text-[10px] opacity-80">UP NEXT</div>
+                <div className="text-sm font-black">{nextStep?.title || 'FINISH'}</div>
+                <div className="text-xs tabular-nums font-mono">
                   {nextStep ? formatSecondsToMMSS(nextStep.durationSeconds) : '00:00'}
                 </div>
               </div>
 
               <div className="flex items-center justify-between px-2">
-                <span className="text-[10px] font-black uppercase tracking-wider text-neutral-400">
+                <span className="text-xs font-black uppercase tracking-wider text-neutral-400">
                   CYCLES LEFT
                 </span>
-                <span className="text-xl font-black text-amber-400 tabular-nums">
+                <span className="text-2xl font-black text-amber-400 tabular-nums">
                   {cyclesLeft}
                 </span>
               </div>
