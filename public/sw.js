@@ -1,10 +1,19 @@
 // Timer Plus Progressive Web App (PWA) Offline Service Worker
-const CACHE_NAME = 'timerplus-cache-v2';
+const CACHE_NAME = 'timerplus-cache-v3';
 
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
   '/icon.svg',
+  '/apple-touch-icon.png',
+  '/apple-touch-icon-precomposed.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png',
+  '/icon-maskable-192x192.png',
+  '/icon-maskable-512x512.png',
+  '/favicon-32x32.png',
+  '/favicon-16x16.png',
+  '/favicon.ico',
 ];
 
 self.addEventListener('install', (event) => {

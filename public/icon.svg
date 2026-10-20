@@ -1,36 +1,48 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
   <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1C1C1E" />
-      <stop offset="100%" stop-color="#050505" />
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#141c14" />
+      <stop offset="60%" stop-color="#0a0c0a" />
+      <stop offset="100%" stop-color="#000000" />
+    </radialGradient>
+    <linearGradient id="neonLime" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A3E635" />
+      <stop offset="100%" stop-color="#22C55E" />
     </linearGradient>
-    <linearGradient id="neonGreen" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#89F535" />
-      <stop offset="100%" stop-color="#55D418" />
+    <linearGradient id="neonCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#06B6D4" />
     </linearGradient>
-    <linearGradient id="alarmRed" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF453A" />
-      <stop offset="100%" stop-color="#D70015" />
-    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
 
-  <!-- Background rounded rect / app icon -->
-  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <!-- Full-bleed true black & subtle center glow background (no rounded corners so OS masks smoothly) -->
+  <rect width="512" height="512" fill="#000000" />
+  <rect width="512" height="512" fill="url(#bgGlow)" />
 
-  <!-- Outer Timer Ring Track -->
-  <circle cx="256" cy="276" r="160" fill="none" stroke="#2C2C2E" stroke-width="26" />
+  <!-- Outer Dial Track -->
+  <circle cx="256" cy="256" r="168" fill="none" stroke="#222722" stroke-width="14" />
 
-  <!-- Neon Green Active Arc -->
-  <path d="M 256 116 A 160 160 0 1 1 142.8 389.2" fill="none" stroke="url(#neonGreen)" stroke-width="26" stroke-linecap="round" />
+  <!-- Luminous Countdown Arc -->
+  <path d="M 256 88 A 168 168 0 1 1 124 360" fill="none" stroke="url(#neonLime)" stroke-width="18" stroke-linecap="round" filter="url(#glow)" />
 
-  <!-- Stopwatch top button / crown -->
-  <rect x="232" y="56" width="48" height="36" rx="10" fill="#E5E5EA" />
-  <rect x="216" y="44" width="80" height="18" rx="8" fill="#8E8E93" />
+  <!-- Stopwatch / Interval tick markers around dial -->
+  <g stroke="#3f4a3f" stroke-width="3" stroke-linecap="round">
+    <line x1="256" y1="102" x2="256" y2="114" />
+    <line x1="410" y1="256" x2="398" y2="256" />
+    <line x1="256" y1="410" x2="256" y2="398" />
+    <line x1="102" y1="256" x2="114" y2="256" />
+  </g>
 
-  <!-- Plus symbol in center with neon gradient -->
-  <rect x="234" y="196" width="44" height="160" rx="14" fill="url(#neonGreen)" />
-  <rect x="176" y="254" width="160" height="44" rx="14" fill="url(#neonGreen)" />
+  <!-- Cyan accent pulse dot at current interval position -->
+  <circle cx="124" cy="360" r="10" fill="url(#neonCyan)" filter="url(#glow)" />
 
-  <!-- Accent mini dot -->
-  <circle cx="360" cy="180" r="14" fill="url(#alarmRed)" />
+  <!-- Athletic Plus Emblem in Center -->
+  <g filter="url(#glow)">
+    <rect x="236" y="176" width="40" height="160" rx="20" fill="url(#neonLime)" />
+    <rect x="176" y="236" width="160" height="40" rx="20" fill="url(#neonLime)" />
+  </g>
 </svg>
