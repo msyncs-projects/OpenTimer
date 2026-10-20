@@ -79,36 +79,36 @@ export function WorkoutListView({
 
               <div className="flex items-start justify-between gap-3 pl-1">
                 {/* Title & Stats */}
-                <div className="space-y-2.5 flex-1">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-3 flex-1">
+                  <div className="flex items-center gap-2.5">
                     <span
-                      className="w-3 h-3 rounded-full shrink-0"
+                      className="w-3.5 h-3.5 rounded-full shrink-0"
                       style={{ backgroundColor: workout.color || '#34C759' }}
                     />
-                    <h3 className="text-lg sm:text-xl font-black uppercase tracking-tight text-white line-clamp-1">
+                    <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white line-clamp-1">
                       {workout.name}
                     </h3>
                   </div>
 
                   {/* Badges / Metrics - BIGGER & CLEAR */}
                   <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-neutral-300">
-                    <span className="px-3 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center gap-1.5 text-green-400 font-black tabular-nums text-sm">
+                    <span className="px-3.5 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center gap-1.5 text-green-400 font-black tabular-nums text-sm">
                       <Clock className="w-4 h-4" />
                       {formatSecondsToMMSS(totalSec)}
                     </span>
 
-                    <span className="px-3 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 tabular-nums font-bold">
+                    <span className="px-3.5 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 tabular-nums font-black text-sm">
                       {totalSets} {totalSets === 1 ? 'SET' : 'SETS'}
                     </span>
 
                     {workout.cycles > 1 && (
-                      <span className="px-3 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 text-amber-400 tabular-nums font-bold">
+                      <span className="px-3.5 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 text-amber-400 tabular-nums font-black text-sm">
                         {workout.cycles} CYCLES
                       </span>
                     )}
 
                     {workInterval && restInterval && (
-                      <span className="px-3 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-300 font-bold">
+                      <span className="px-3.5 py-1.5 rounded-xl bg-neutral-950 border border-neutral-800 text-neutral-300 font-bold text-xs sm:text-sm">
                         {workInterval.durationSeconds}s / {restInterval.durationSeconds}s
                       </span>
                     )}
@@ -122,10 +122,10 @@ export function WorkoutListView({
                     e.stopPropagation();
                     onStart(workout);
                   }}
-                  className="w-14 h-14 rounded-2xl bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition-all active:scale-95 shrink-0 cursor-pointer"
+                  className="w-16 h-16 rounded-2xl bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition-all active:scale-95 shrink-0 cursor-pointer"
                   aria-label={`Start ${workout.name}`}
                 >
-                  <Play className="w-7 h-7 fill-black ml-0.5" />
+                  <Play className="w-8 h-8 fill-black ml-0.5" />
                 </button>
               </div>
 

@@ -120,15 +120,15 @@ export default function Home() {
   return (
     <main className="min-h-dvh flex flex-col bg-black text-white relative">
       {/* Top Header Bar */}
-      <header className="safe-top sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3 border-b border-neutral-800 flex items-center justify-between">
+      <header className="safe-top sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3.5 border-b border-neutral-800 flex items-center justify-between">
         {/* App Logo & Branding */}
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black text-lg shadow-md shadow-green-500/20">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black text-xl shadow-md shadow-green-500/20">
             +
           </div>
           <div>
-            <span className="text-base font-black tracking-tight text-white">TIMER</span>
-            <span className="text-base font-black tracking-tight text-green-400">PLUS</span>
+            <span className="text-lg font-black tracking-tight text-white">TIMER</span>
+            <span className="text-lg font-black tracking-tight text-green-400">PLUS</span>
           </div>
         </div>
 
@@ -137,11 +137,11 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setShareWorkout(workouts[0] || null)}
-            className="px-3 py-1.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-bold active:scale-95 transition"
+            className="px-3.5 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-bold active:scale-95 transition"
             title="Share & Backup"
           >
-            <Share2 className="w-3.5 h-3.5 text-green-400" />
-            <span className="hidden sm:inline">Backup</span>
+            <Share2 className="w-4 h-4 text-green-400" />
+            <span className="hidden sm:inline font-bold">Backup</span>
           </button>
         </div>
       </header>
@@ -150,9 +150,9 @@ export default function Home() {
       <div className="flex-1 w-full max-w-xl mx-auto px-4 py-4">
         {/* Mobile PWA Install Reminder (dismissible) */}
         {showPwaBanner && (
-          <div className="mb-4 p-3 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-lg">
-            <div className="flex items-center gap-2 text-neutral-300">
-              <Smartphone className="w-4 h-4 text-green-400 shrink-0" />
+          <div className="mb-4 p-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-lg">
+            <div className="flex items-center gap-2.5 text-neutral-300">
+              <Smartphone className="w-5 h-5 text-green-400 shrink-0" />
               <span>
                 Tip: Tap <strong className="text-white">Share → Add to Home Screen</strong> for the full standalone app experience!
               </span>
@@ -160,7 +160,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setShowPwaBanner(false)}
-              className="text-neutral-500 hover:text-white px-2 py-1 font-bold"
+              className="text-neutral-500 hover:text-white px-2 py-1 font-bold text-sm"
             >
               ✕
             </button>
@@ -172,7 +172,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setActiveTab('timers')}
-            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
+            className={`py-3 rounded-xl text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer ${
               activeTab === 'timers'
                 ? 'bg-neutral-800 text-white shadow'
                 : 'text-neutral-400 hover:text-white'
@@ -185,7 +185,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setActiveTab('history')}
-            className={`py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer ${
+            className={`py-3 rounded-xl text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer ${
               activeTab === 'history'
                 ? 'bg-neutral-800 text-white shadow'
                 : 'text-neutral-400 hover:text-white'
