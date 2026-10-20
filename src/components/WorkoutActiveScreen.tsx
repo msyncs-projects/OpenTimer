@@ -163,12 +163,16 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
         <div className="flex flex-col h-full w-full">
           {/* Top Header: High-visibility Total Time & Controls */}
           <header className="safe-top bg-black/95 px-5 py-3 flex items-center justify-between border-b border-white/10 z-20">
-            {/* Total Remaining Time (BIGGER & CLEAR) */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-800">
-              <Clock className="w-4 h-4 text-neutral-400" />
-              <span className="text-sm font-black tracking-tight text-white tabular-nums">
-                TOTAL: {formatSecondsToMMSS(totalRemainingSeconds)}
-              </span>
+            {/* Total Remaining Time (MASSIVE & PROMINENT) */}
+            <div className="flex items-center gap-3">
+              <div className="flex flex-col">
+                <span className="text-[11px] font-black uppercase tracking-widest text-neutral-400 flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5 text-neutral-400" /> TOTAL
+                </span>
+                <span className="text-2xl sm:text-3xl font-black tracking-tight text-white tabular-nums leading-none mt-0.5">
+                  {formatSecondsToMMSS(totalRemainingSeconds)}
+                </span>
+              </div>
             </div>
 
             {/* Quick Actions (Large Tap Targets) */}
@@ -176,28 +180,28 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               <button
                 type="button"
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
+                className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Sound"
               >
-                {soundEnabled ? <Volume2 className="w-5 h-5 text-green-400" /> : <VolumeX className="w-5 h-5 text-neutral-500" />}
+                {soundEnabled ? <Volume2 className="w-6 h-6 text-green-400" /> : <VolumeX className="w-6 h-6 text-neutral-500" />}
               </button>
 
               <button
                 type="button"
                 onClick={toggleFullscreen}
-                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
+                className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Fullscreen"
               >
-                {isFullscreen ? <Minimize2 className="w-5 h-5" /> : <Maximize2 className="w-5 h-5" />}
+                {isFullscreen ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
               </button>
 
               <button
                 type="button"
                 onClick={onExit}
-                className="w-11 h-11 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-red-400 hover:text-red-300 transition active:scale-95 cursor-pointer"
+                className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-red-400 hover:text-red-300 transition active:scale-95 cursor-pointer"
                 aria-label="Exit Workout"
               >
-                <X className="w-5 h-5 stroke-[2.5]" />
+                <X className="w-6 h-6 stroke-[2.5]" />
               </button>
             </div>
           </header>
@@ -241,7 +245,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             {/* MASSIVE COUNTDOWN DIGITS (Visible from across the room!) */}
             <div className="my-auto text-center z-10 flex flex-col items-center justify-center w-full">
               <div
-                className="timer-digits font-black tracking-tighter leading-none select-none text-[32vw] sm:text-[150px] md:text-[200px]"
+                className="timer-digits font-black tracking-tighter leading-none select-none text-[35vw] sm:text-[170px] md:text-[220px]"
                 style={{ color: textColor }}
               >
                 {formatSecondsToMMSS(stepRemainingSeconds)}
@@ -320,12 +324,12 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
 
           {/* Bottom Black Control Dock (MUCH BIGGER NUMBERS & BUTTONS) */}
           <footer className="safe-bottom bg-neutral-950 px-6 py-4 flex items-center justify-between border-t border-neutral-900 z-20">
-            {/* Left: Repeats Left (BIG NUMBER) */}
-            <div className="flex flex-col items-center min-w-[80px]">
-              <span className="text-xs font-black uppercase tracking-widest text-neutral-400">
+            {/* Left: Repeats Left (MASSIVE NUMBER) */}
+            <div className="flex flex-col items-center min-w-[90px]">
+              <span className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-1">
                 REPEATS LEFT
               </span>
-              <span className="text-4xl sm:text-5xl font-black text-blue-400 tabular-nums leading-tight">
+              <span className="text-6xl sm:text-7xl font-black text-blue-400 tabular-nums leading-none">
                 {repeatsLeft}
               </span>
             </div>
@@ -334,7 +338,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             <button
               type="button"
               onClick={togglePause}
-              className={`w-22 h-22 sm:w-24 sm:h-24 rounded-3xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-2xl cursor-pointer ${
+              className={`w-22 h-22 sm:w-26 sm:h-26 rounded-3xl flex items-center justify-center transition-all duration-150 active:scale-95 shadow-2xl cursor-pointer ${
                 isPlaying
                   ? 'bg-neutral-900 border-2 border-neutral-700 hover:border-neutral-500 text-green-400 shadow-green-950/50'
                   : 'bg-green-500 border-2 border-green-300 text-black shadow-green-500/50 scale-105'
@@ -342,18 +346,18 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               aria-label={isPlaying ? 'Pause Workout' : 'Start Workout'}
             >
               {isPlaying ? (
-                <Pause className="w-10 h-10 fill-green-400 text-green-400" />
+                <Pause className="w-11 h-11 fill-green-400 text-green-400" />
               ) : (
-                <Play className="w-11 h-11 fill-black text-black ml-1.5" />
+                <Play className="w-12 h-12 fill-black text-black ml-1.5" />
               )}
             </button>
 
-            {/* Right: Cycles Left (BIG NUMBER) */}
-            <div className="flex flex-col items-center min-w-[80px]">
-              <span className="text-xs font-black uppercase tracking-widest text-neutral-400">
+            {/* Right: Cycles Left (MASSIVE NUMBER) */}
+            <div className="flex flex-col items-center min-w-[90px]">
+              <span className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-1">
                 CYCLES LEFT
               </span>
-              <span className="text-4xl sm:text-5xl font-black text-amber-400 tabular-nums leading-tight">
+              <span className="text-6xl sm:text-7xl font-black text-amber-400 tabular-nums leading-none">
                 {cyclesLeft}
               </span>
             </div>
@@ -396,8 +400,13 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
                 </span>
               </div>
 
-              <div className="px-4 py-1.5 rounded-full bg-black/15 font-black text-sm sm:text-base tabular-nums" style={{ color: textColor }}>
-                TOTAL REMAINING: {formatSecondsToMMSS(totalRemainingSeconds)}
+              <div className="flex flex-col items-end">
+                <span className="text-[11px] font-black uppercase tracking-widest opacity-80" style={{ color: textColor }}>
+                  TOTAL TIME
+                </span>
+                <span className="text-2xl sm:text-3xl font-black tabular-nums leading-none mt-0.5" style={{ color: textColor }}>
+                  {formatSecondsToMMSS(totalRemainingSeconds)}
+                </span>
               </div>
             </div>
 
@@ -485,10 +494,10 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
 
               {/* Repeats Left Badge */}
               <div className="text-center">
-                <div className="text-xs font-black uppercase tracking-widest text-neutral-400">
+                <div className="text-xs font-black uppercase tracking-widest text-neutral-400 mb-1">
                   REPEATS LEFT
                 </div>
-                <div className="text-4xl sm:text-5xl font-black text-blue-400 tabular-nums">
+                <div className="text-6xl sm:text-7xl font-black text-blue-400 tabular-nums leading-none">
                   {repeatsLeft}
                 </div>
               </div>
@@ -497,12 +506,12 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             {/* Next Ribbon & Cycles */}
             <div className="space-y-4 pt-4 border-t border-neutral-800">
               <div
-                className="p-3 rounded-2xl text-center font-black uppercase text-xs shadow"
+                className="p-3.5 rounded-2xl text-center font-black uppercase text-xs shadow"
                 style={{ backgroundColor: nextBgColor, color: nextTextColor }}
               >
                 <div className="text-[10px] opacity-80">UP NEXT</div>
-                <div className="text-sm font-black">{nextStep?.title || 'FINISH'}</div>
-                <div className="text-xs tabular-nums font-mono">
+                <div className="text-base font-black">{nextStep?.title || 'FINISH'}</div>
+                <div className="text-sm font-black tabular-nums font-mono">
                   {nextStep ? formatSecondsToMMSS(nextStep.durationSeconds) : '00:00'}
                 </div>
               </div>
@@ -511,7 +520,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
                 <span className="text-xs font-black uppercase tracking-wider text-neutral-400">
                   CYCLES LEFT
                 </span>
-                <span className="text-2xl font-black text-amber-400 tabular-nums">
+                <span className="text-4xl sm:text-5xl font-black text-amber-400 tabular-nums leading-none">
                   {cyclesLeft}
                 </span>
               </div>
