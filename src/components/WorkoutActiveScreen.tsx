@@ -9,8 +9,6 @@ import confetti from 'canvas-confetti';
 import {
   Volume2,
   VolumeX,
-  Maximize2,
-  Minimize2,
   RotateCcw,
   SkipBack,
   SkipForward,
@@ -29,7 +27,6 @@ interface WorkoutActiveScreenProps {
 }
 
 export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActiveScreenProps) {
-  const [isFullscreen, setIsFullscreen] = useState(false);
   const [isLandscape, setIsLandscape] = useState(false);
 
   const {
@@ -92,21 +89,6 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
       window.removeEventListener('orientationchange', checkOrientation);
     };
   }, []);
-
-  const toggleFullscreen = async () => {
-    if (typeof document === 'undefined') return;
-    try {
-      if (!document.fullscreenElement) {
-        await document.documentElement.requestFullscreen();
-        setIsFullscreen(true);
-      } else {
-        await document.exitFullscreen();
-        setIsFullscreen(false);
-      }
-    } catch {
-      // ignore fullscreen restrictions
-    }
-  };
 
   // Determine current theme colors
   const phaseType = currentStep?.type || 'prepare';
@@ -188,15 +170,6 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
 
               <button
                 type="button"
-                onClick={toggleFullscreen}
-                className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
-                aria-label="Toggle Fullscreen"
-              >
-                {isFullscreen ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
-              </button>
-
-              <button
-                type="button"
                 onClick={onExit}
                 className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-red-400 hover:text-red-300 transition active:scale-95 cursor-pointer"
                 aria-label="Exit Workout"
@@ -235,7 +208,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
                 {currentStep?.title || 'WORK'}
               </h1>
               <p
-                className="text-sm sm:text-base font-bold opacity-80 mt-1 tracking-wide"
+                className="text-xl sm:text-2xl md:text-3xl font-black opacity-90 mt-1 uppercase tracking-wider"
                 style={{ color: textColor }}
               >
                 {currentStep?.subtitle}
@@ -273,7 +246,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               </button>
 
               <span
-                className="text-sm font-black uppercase tracking-widest opacity-70"
+                className="text-lg sm:text-xl md:text-2xl font-black uppercase tracking-widest opacity-85"
                 style={{ color: textColor }}
               >
                 {currentStep ? `Set ${currentStep.repeatIndex}/${currentStep.totalRepeats}` : ''}
@@ -432,7 +405,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
               </button>
 
               <span
-                className="text-sm font-black uppercase tracking-widest opacity-80"
+                className="text-xl sm:text-2xl font-black uppercase tracking-wider opacity-90"
                 style={{ color: textColor }}
               >
                 {currentStep?.subtitle}
@@ -459,14 +432,6 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
                 className="p-3 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
               >
                 {soundEnabled ? <Volume2 className="w-6 h-6 text-green-400" /> : <VolumeX className="w-6 h-6 text-neutral-500" />}
-              </button>
-
-              <button
-                type="button"
-                onClick={toggleFullscreen}
-                className="p-3 rounded-xl bg-neutral-900 text-neutral-300 hover:text-white cursor-pointer active:scale-95"
-              >
-                {isFullscreen ? <Minimize2 className="w-6 h-6" /> : <Maximize2 className="w-6 h-6" />}
               </button>
 
               <button
