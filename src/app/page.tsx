@@ -18,7 +18,7 @@ import { WorkoutActiveScreen } from '@/components/WorkoutActiveScreen';
 import { WorkoutBuilderModal } from '@/components/WorkoutBuilderModal';
 import { WorkoutHistoryView } from '@/components/WorkoutHistoryView';
 import { ShareModal } from '@/components/ShareModal';
-import { unlockAudio } from '@/lib/audio';
+import { unlockAudio, initGlobalAudioUnlock } from '@/lib/audio';
 import { Dumbbell, History, Share2, Plus, Sparkles, Smartphone } from 'lucide-react';
 
 export default function Home() {
@@ -38,6 +38,7 @@ export default function Home() {
 
     // Check for shared workout in URL
     if (typeof window !== 'undefined') {
+      initGlobalAudioUnlock();
       const params = new URLSearchParams(window.location.search);
       const sharedCode = params.get('w');
       if (sharedCode) {

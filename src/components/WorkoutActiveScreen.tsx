@@ -5,6 +5,7 @@ import { Workout } from '@/types/workout';
 import { useWorkoutTimer } from '@/lib/useWorkoutTimer';
 import { formatSecondsToMMSS } from '@/lib/storage';
 import { useWakeLock } from '@/lib/useWakeLock';
+import { unlockAudio, playBeep } from '@/lib/audio';
 import confetti from 'canvas-confetti';
 import {
   Volume2,
@@ -161,9 +162,17 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
             <div className="flex items-center gap-2.5">
               <button
                 type="button"
-                onClick={() => setSoundEnabled(!soundEnabled)}
+                onClick={() => {
+                  const next = !soundEnabled;
+                  setSoundEnabled(next);
+                  if (next) {
+                    unlockAudio();
+                    playBeep(true, 0.9);
+                  }
+                }}
                 className="w-12 h-12 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
                 aria-label="Toggle Sound"
+                title={soundEnabled ? 'Sound Enabled (Tap to Mute)' : 'Sound Muted (Tap to Unmute)'}
               >
                 {soundEnabled ? <Volume2 className="w-6 h-6 text-green-400" /> : <VolumeX className="w-6 h-6 text-neutral-500" />}
               </button>

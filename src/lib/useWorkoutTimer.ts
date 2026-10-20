@@ -194,7 +194,14 @@ export function useWorkoutTimer(workout: Workout, onComplete?: () => void) {
   // Play transition sound for the given step
   const triggerTransitionSound = useCallback((step: FlattenedStep) => {
     if (!soundEnabled) return;
-    const settings = workout.soundSettings;
+    const settings = workout.soundSettings || {
+      countdownBeeps: true,
+      voiceCues: true,
+      soundType: 'bell',
+      volume: 0.9,
+      vibration: true,
+    };
+    const vol = typeof settings.volume === 'number' ? settings.volume : 0.9;
 
     // Flash screen
     setScreenFlash(true);
@@ -207,11 +214,11 @@ export function useWorkoutTimer(workout: Workout, onComplete?: () => void) {
 
     // Audio cue
     if (settings.soundType === 'bell') {
-      playBoxingBell(settings.volume);
+      playBoxingBell(vol);
     } else if (settings.soundType === 'whistle') {
-      playWhistle(settings.volume);
+      playWhistle(vol);
     } else {
-      playBeep(true, settings.volume);
+      playBeep(true, vol);
     }
 
     // Voice announcement
@@ -231,10 +238,17 @@ export function useWorkoutTimer(workout: Workout, onComplete?: () => void) {
   // Handle countdown sound at 3, 2, 1 seconds
   const handleCountdownCue = useCallback((sec: number) => {
     if (!soundEnabled) return;
-    const settings = workout.soundSettings;
+    const settings = workout.soundSettings || {
+      countdownBeeps: true,
+      voiceCues: true,
+      soundType: 'bell',
+      volume: 0.9,
+      vibration: true,
+    };
+    const vol = typeof settings.volume === 'number' ? settings.volume : 0.9;
 
     if (settings.countdownBeeps) {
-      playBeep(false, settings.volume * 0.7);
+      playBeep(false, vol * 0.7);
     }
     if (settings.vibration) {
       triggerHaptic(80);

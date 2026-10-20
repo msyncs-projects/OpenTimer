@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Workout, WorkoutRound, IntervalItem, SoundSettings } from '@/types/workout';
 import { formatSecondsToMMSS } from '@/lib/storage';
+import { testSound, unlockAudio } from '@/lib/audio';
 import {
   X,
   Check,
@@ -540,13 +541,30 @@ export function WorkoutBuilderModal({ initialWorkout, onSave, onClose }: Workout
               <div className="p-4 pt-1 space-y-3 border-t border-neutral-850">
                 {/* Sound Type */}
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-neutral-300">Tone Type</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-neutral-300">Tone Type</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        unlockAudio();
+                        testSound(soundSettings.soundType, soundSettings.volume || 0.9);
+                      }}
+                      className="px-2 py-0.5 rounded-md bg-neutral-800 hover:bg-neutral-700 text-[10px] font-bold text-green-400 active:scale-95 transition"
+                      title="Play Preview Sound"
+                    >
+                      ▶ Test
+                    </button>
+                  </div>
                   <div className="flex bg-neutral-900 p-1 rounded-xl border border-neutral-800">
                     {(['bell', 'whistle', 'beep'] as const).map((type) => (
                       <button
                         key={type}
                         type="button"
-                        onClick={() => setSoundSettings({ ...soundSettings, soundType: type })}
+                        onClick={() => {
+                          unlockAudio();
+                          setSoundSettings({ ...soundSettings, soundType: type });
+                          testSound(type, soundSettings.volume || 0.9);
+                        }}
                         className={`px-3 py-1 rounded-lg text-xs font-black uppercase transition ${
                           soundSettings.soundType === type
                             ? 'bg-green-500 text-black shadow'
