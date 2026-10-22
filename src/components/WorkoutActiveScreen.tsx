@@ -19,7 +19,6 @@ import {
   Flame,
   Award,
   Clock,
-  Heart,
 } from 'lucide-react';
 
 interface WorkoutActiveScreenProps {
@@ -56,7 +55,6 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
     repeatsLeft,
     cyclesLeft,
     screenFlash,
-    simulatedBpm,
     soundEnabled,
     setSoundEnabled,
     start,
@@ -158,23 +156,14 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
         <div className="flex flex-col h-full w-full">
           {/* Top Header: High-visibility Total Time & Controls */}
           <header className="safe-top bg-black/95 px-6 py-4 flex items-center justify-between border-b border-white/10 z-20">
-            {/* Total Remaining Time (EXTRA LARGE & PROMINENT) & BPM */}
-            <div className="flex items-center gap-4">
+            {/* Total Remaining Time (EXTRA LARGE & PROMINENT) */}
+            <div className="flex items-center gap-3">
               <div className="flex flex-col">
                 <span className="text-sm sm:text-base font-black uppercase tracking-widest text-neutral-400 flex items-center gap-2">
                   <Clock className="w-5 h-5 text-neutral-400 shrink-0" /> TOTAL TIME
                 </span>
                 <span className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-white tabular-nums leading-none mt-1">
                   {formatSecondsToMMSS(totalRemainingSeconds)}
-                </span>
-              </div>
-
-              <div className="hidden min-[420px]:flex flex-col pl-4 border-l border-neutral-800">
-                <span className="text-xs sm:text-sm font-black uppercase tracking-widest text-neutral-400 flex items-center gap-1.5">
-                  <Heart className={`w-4 h-4 text-red-500 fill-red-500 ${isPlaying ? 'animate-pulse' : ''}`} /> BPM
-                </span>
-                <span className="text-3xl sm:text-4xl font-black tracking-tight text-white tabular-nums font-mono leading-none mt-1">
-                  {simulatedBpm || 120}
                 </span>
               </div>
             </div>
@@ -373,15 +362,11 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
            timerplus_0.png & timerplus_5.png
            ======================================================== */
         <div className="flex flex-col h-full w-full select-none overflow-hidden">
-          {/* Top Header: Heart rate / workout name, Phase title, Total Time & Controls */}
+          {/* Top Header: Workout name, Phase title, Total Time & Controls */}
           <header className="safe-top bg-black/95 px-4 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between border-b border-white/10 z-20 shrink-0 safe-x">
-            {/* Left: Heart rate & Workout Name */}
-            <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-              <span className="flex items-center gap-1.5 text-xs sm:text-sm font-black tracking-tight text-white bg-neutral-900 border border-neutral-800 px-2.5 py-1 rounded-xl shrink-0">
-                <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500 fill-red-500 ${isPlaying ? 'animate-pulse' : ''}`} />
-                <span className="tabular-nums font-mono text-neutral-200">{simulatedBpm || 120}</span>
-              </span>
-              <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-neutral-400 truncate max-w-[120px] sm:max-w-[200px]">
+            {/* Left: Workout Name */}
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-neutral-200 bg-neutral-900 border border-neutral-800 px-3 py-1.5 rounded-xl truncate max-w-[160px] sm:max-w-[240px]">
                 {workout.name}
               </span>
             </div>
