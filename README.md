@@ -38,7 +38,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/mctechnology-projects/OpenTimer.git
+git clone https://github.com/msyncs-projects/OpenTimer.git
 
 # 2. Enter the directory
 cd OpenTimer
