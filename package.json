@@ -1,6 +1,8 @@
 {
-  "name": "timerplus",
-  "version": "0.1.0",
+  "name": "opentimer",
+  "version": "1.0.0",
+  "description": "Modern open-source interval timer PWA for HIIT, Tabata, Boxing and Circuit Training",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",

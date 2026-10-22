@@ -1,4 +1,4 @@
-// Web Audio API Synthesizer & Speech Synthesis for Timer Plus
+// Web Audio API Synthesizer & Speech Synthesis for OpenTimer
 // Works 100% offline with zero external audio assets
 // Optimized for iOS Safari (including silent switch bypass) & Android Chrome
 

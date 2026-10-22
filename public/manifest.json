@@ -1,6 +1,6 @@
 {
-  "name": "Timer Plus - Workouts Timer",
-  "short_name": "Timer+",
+  "name": "OpenTimer — Workouts Interval Timer",
+  "short_name": "OpenTimer",
   "description": "High-intensity interval training timer for HIIT, Tabata, Circuit training, and Boxing.",
   "start_url": "/",
   "scope": "/",

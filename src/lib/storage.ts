@@ -119,8 +119,10 @@ export const DEFAULT_WORKOUTS: Workout[] = [
   },
 ];
 
-const STORAGE_KEY_WORKOUTS = 'timerplus_workouts_v1';
-const STORAGE_KEY_LOGS = 'timerplus_logs_v1';
+const STORAGE_KEY_WORKOUTS = 'opentimer_workouts_v1';
+const LEGACY_STORAGE_KEY_WORKOUTS = 'timerplus_workouts_v1';
+const STORAGE_KEY_LOGS = 'opentimer_logs_v1';
+const LEGACY_STORAGE_KEY_LOGS = 'timerplus_logs_v1';
 
 export function calculateTotalWorkoutSeconds(workout: Workout): number {
   let total = workout.prepareSeconds;
@@ -153,7 +155,7 @@ export function formatSecondsToMMSS(seconds: number): string {
 export function loadWorkouts(): Workout[] {
   if (typeof window === 'undefined') return DEFAULT_WORKOUTS;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY_WORKOUTS);
+    const raw = localStorage.getItem(STORAGE_KEY_WORKOUTS) || localStorage.getItem(LEGACY_STORAGE_KEY_WORKOUTS);
     if (!raw) {
       localStorage.setItem(STORAGE_KEY_WORKOUTS, JSON.stringify(DEFAULT_WORKOUTS));
       return DEFAULT_WORKOUTS;
@@ -216,7 +218,7 @@ export function duplicateWorkout(workout: Workout): Workout {
 export function loadWorkoutLogs(): WorkoutLog[] {
   if (typeof window === 'undefined') return [];
   try {
-    const raw = localStorage.getItem(STORAGE_KEY_LOGS);
+    const raw = localStorage.getItem(STORAGE_KEY_LOGS) || localStorage.getItem(LEGACY_STORAGE_KEY_LOGS);
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];

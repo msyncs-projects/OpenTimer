@@ -1,5 +1,5 @@
-// Timer Plus Progressive Web App (PWA) Offline Service Worker
-const CACHE_NAME = 'timerplus-cache-v4';
+// OpenTimer Progressive Web App (PWA) Offline Service Worker
+const CACHE_NAME = 'opentimer-cache-v1';
 
 const PRECACHE_ASSETS = [
   '/',

@@ -2,13 +2,13 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Timer Plus — Workouts Interval Timer",
+  title: "OpenTimer — Workouts Interval Timer",
   description: "HIIT, Tabata, Boxing and Circuit Training Interval Timer with voice guidance and high contrast display.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Timer Plus",
+    title: "OpenTimer",
   },
   icons: {
     icon: [
@@ -46,9 +46,9 @@ export default function RootLayout({
         <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/apple-touch-icon-precomposed.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="Timer Plus" />
+        <meta name="apple-mobile-web-app-title" content="OpenTimer" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="application-name" content="Timer Plus" />
+        <meta name="application-name" content="OpenTimer" />
       </head>
       <body className="min-h-dvh w-full bg-black text-white antialiased">
         {children}
