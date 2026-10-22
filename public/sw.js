@@ -1,5 +1,5 @@
 // Timer Plus Progressive Web App (PWA) Offline Service Worker
-const CACHE_NAME = 'timerplus-cache-v3';
+const CACHE_NAME = 'timerplus-cache-v4';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -45,9 +45,10 @@ self.addEventListener('fetch', (event) => {
   // Ignore chrome-extension or external URLs
   if (url.origin !== self.location.origin) return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
+  // For page navigations (HTML document), use Network-First to ensure updates appear immediately
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
         .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200) {
             const responseToCache = networkResponse.clone();
@@ -58,13 +59,36 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => {
-          // If offline and navigate request fails, fallback to cached root '/'
-          if (event.request.mode === 'navigate') {
-            return caches.match('/');
-          }
-        });
+          return caches.match(event.request).then((cached) => cached || caches.match('/'));
+        })
+    );
+    return;
+  }
 
-      return cachedResponse || fetchPromise;
+  // For static assets, try cache first, fallback to network
+  event.respondWith(
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        // Fetch in background to keep cache fresh (stale-while-revalidate)
+        fetch(event.request)
+          .then((networkResponse) => {
+            if (networkResponse && networkResponse.status === 200) {
+              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, networkResponse));
+            }
+          })
+          .catch(() => {});
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return networkResponse;
+      });
     })
   );
 });

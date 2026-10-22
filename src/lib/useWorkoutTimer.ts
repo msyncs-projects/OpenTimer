@@ -121,7 +121,6 @@ export interface WorkoutTimerState {
   repeatsLeft: number;
   cyclesLeft: number;
   screenFlash: boolean;
-  simulatedBpm: number;
   soundEnabled: boolean;
 }
 
@@ -178,18 +177,6 @@ export function useWorkoutTimer(workout: Workout, onComplete?: () => void) {
   }, [currentStepIndex, stepRemaining, steps, isCompleted]);
 
   const totalElapsed = Math.max(0, totalWorkoutDuration - totalRemaining);
-
-  // Simulated Heart Rate BPM based on phase (realistic workout feedback)
-  const simulatedBpm = useMemo(() => {
-    if (!isPlaying && !isPaused) return 72;
-    if (currentStep?.type === 'work') {
-      const progress = 1 - (stepRemaining / (currentStep.durationSeconds || 1));
-      return Math.round(135 + progress * 28); // 135 to 163 BPM
-    }
-    if (currentStep?.type === 'prepare') return 88;
-    if (currentStep?.type === 'rest' || currentStep?.type === 'cycle_rest') return 110;
-    return 95;
-  }, [isPlaying, isPaused, currentStep, stepRemaining]);
 
   // Play transition sound for the given step
   const triggerTransitionSound = useCallback((step: FlattenedStep) => {
@@ -413,7 +400,6 @@ export function useWorkoutTimer(workout: Workout, onComplete?: () => void) {
     repeatsLeft,
     cyclesLeft,
     screenFlash,
-    simulatedBpm,
     soundEnabled,
     setSoundEnabled,
     start,
