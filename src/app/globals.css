@@ -44,13 +44,33 @@ html, body {
   -webkit-user-select: none;
 }
 
-/* Safe areas for iPhone dynamic island and home bar */
+/* Safe areas for iPhone dynamic island, home bar, and landscape notch */
 .safe-top {
   padding-top: max(12px, env(safe-area-inset-top));
 }
 
 .safe-bottom {
   padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+.safe-left {
+  padding-left: max(16px, env(safe-area-inset-left));
+}
+
+.safe-right {
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+.safe-x {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+.safe-area-all {
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
 }
 
 /* Custom scrollbar for workout lists */

@@ -58,8 +58,8 @@ export function ShareModal({ workout, onImportSuccess, onClose }: ShareModalProp
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150">
-      <div className="w-full sm:max-w-md bg-neutral-900 border border-neutral-800 rounded-t-[32px] sm:rounded-[32px] p-5 space-y-4 shadow-2xl">
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150 safe-area-all">
+      <div className="w-full sm:max-w-md bg-neutral-900 border border-neutral-800 rounded-t-[32px] sm:rounded-[32px] p-5 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
           <div className="flex items-center gap-2">

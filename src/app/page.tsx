@@ -120,7 +120,7 @@ export default function Home() {
   return (
     <main className="min-h-dvh flex flex-col bg-black text-white relative">
       {/* Top Header Bar */}
-      <header className="safe-top sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3.5 border-b border-neutral-800 flex items-center justify-between">
+      <header className="safe-top safe-x sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3.5 border-b border-neutral-800 flex items-center justify-between">
         {/* App Logo & Branding */}
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black text-xl shadow-md shadow-green-500/20">
@@ -147,7 +147,7 @@ export default function Home() {
       </header>
 
       {/* Main Content Area */}
-      <div className="flex-1 w-full max-w-xl mx-auto px-4 py-4">
+      <div className="flex-1 w-full max-w-xl mx-auto px-4 py-4 safe-x">
         {/* Mobile PWA Install Reminder (dismissible) */}
         {showPwaBanner && (
           <div className="mb-4 p-3.5 bg-neutral-900 border border-neutral-800 rounded-2xl flex items-center justify-between gap-3 text-xs shadow-lg">

@@ -674,8 +674,8 @@ function TimeDialModal({ title, initialSeconds, onSave, onClose }: TimeDialModal
   const presets = [5, 10, 15, 20, 30, 45, 60, 90, 120, 180, 300];
 
   return (
-    <div className="fixed inset-0 z-60 bg-black/90 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150">
-      <div className="w-full sm:max-w-sm bg-neutral-900 border border-neutral-800 rounded-t-[32px] sm:rounded-[32px] p-5 space-y-5 shadow-2xl">
+    <div className="fixed inset-0 z-60 bg-black/90 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in duration-150 safe-area-all">
+      <div className="w-full sm:max-w-sm bg-neutral-900 border border-neutral-800 rounded-t-[32px] sm:rounded-[32px] p-5 space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto">
         <div className="flex items-center justify-between pb-2 border-b border-neutral-800">
           <span className="text-xs font-black uppercase tracking-wider text-neutral-400">
             {title}
