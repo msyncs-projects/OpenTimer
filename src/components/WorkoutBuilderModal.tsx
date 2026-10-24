@@ -681,7 +681,6 @@ export function WorkoutBuilderModal({
 
       {/* ========================================================
           TIME DIAL PICKER MODAL (Authentic Cylinder Wheel Picker)
-          Matching screenshot timerplus_9.png!
          ======================================================== */}
       {activePicker && (
         <TimeDialModal

@@ -211,7 +211,7 @@ export function WorkoutListView({
         </div>
       ) : null}
 
-      {/* Floating Action Button (FAB) - Matching screenshot timerplus_4.png! */}
+      {/* Floating Action Button (FAB) */}
       <div className="fixed right-5 bottom-6 z-40">
         <button
           type="button"

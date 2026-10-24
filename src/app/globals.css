@@ -13,7 +13,7 @@ html, body {
   min-height: 100%;
 }
 
-/* Authentic chevron pattern used in Timer Plus */
+/* Authentic chevron pattern used in OpenTimer */
 .bg-chevrons {
   background-image: repeating-linear-gradient(
     -55deg,

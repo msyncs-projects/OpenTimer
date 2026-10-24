@@ -358,8 +358,7 @@ export function WorkoutActiveScreen({ workout, onExit, onFinish }: WorkoutActive
       ) : (
         /* ========================================================
            LANDSCAPE SCOREBOARD LAYOUT (Phone Sideways / Gym Board)
-           Authentic Timer+ design matching reference assets:
-           timerplus_0.png & timerplus_5.png
+           Authentic OpenTimer scoreboard design
            ======================================================== */
         <div className="flex flex-col h-full w-full select-none overflow-hidden">
           {/* Top Header: Workout name, Phase title, Total Time & Controls */}

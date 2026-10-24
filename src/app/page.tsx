@@ -16,7 +16,7 @@ import { WorkoutActiveScreen } from '@/components/WorkoutActiveScreen';
 import { WorkoutBuilderModal } from '@/components/WorkoutBuilderModal';
 import { ShareModal } from '@/components/ShareModal';
 import { unlockAudio, initGlobalAudioUnlock } from '@/lib/audio';
-import { Share2, Smartphone } from 'lucide-react';
+import { Share2, Smartphone, Timer } from 'lucide-react';
 
 export default function Home() {
   const [workouts, setWorkouts] = useState<Workout[]>(DEFAULT_WORKOUTS);
@@ -124,12 +124,12 @@ export default function Home() {
       <header className="safe-top safe-x sticky top-0 z-30 bg-black/90 backdrop-blur-md px-5 py-3.5 border-b border-neutral-800 flex items-center justify-between">
         {/* App Logo & Branding */}
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black text-xl shadow-md shadow-green-500/20">
-            +
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-green-500 to-lime-400 flex items-center justify-center text-black font-black shadow-md shadow-green-500/20">
+            <Timer className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div>
-            <span className="text-lg font-black tracking-tight text-white">TIMER</span>
-            <span className="text-lg font-black tracking-tight text-green-400">PLUS</span>
+            <span className="text-lg font-black tracking-tight text-white">OPEN</span>
+            <span className="text-lg font-black tracking-tight text-green-400">TIMER</span>
           </div>
         </div>
 
