@@ -161,7 +161,7 @@ export function loadWorkouts(): Workout[] {
       return DEFAULT_WORKOUTS;
     }
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
+    if (Array.isArray(parsed)) {
       return parsed;
     }
     return DEFAULT_WORKOUTS;

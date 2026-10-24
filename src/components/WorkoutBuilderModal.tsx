@@ -9,15 +9,12 @@ import {
   Check,
   Plus,
   Trash2,
-  Copy,
   AlertCircle,
   RotateCw,
   Pause,
   Snowflake,
   Volume2,
   ChevronRight,
-  Clock,
-  Smartphone,
   ChevronUp,
   ChevronDown,
 } from 'lucide-react';
@@ -25,6 +22,7 @@ import {
 interface WorkoutBuilderModalProps {
   initialWorkout?: Workout | null;
   onSave: (workout: Workout) => void;
+  onDelete?: (id: string) => boolean | void;
   onClose: () => void;
 }
 
@@ -42,7 +40,12 @@ const ACCENT_COLORS = [
 // Helper to create a new unique ID
 const uid = () => `id_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
-export function WorkoutBuilderModal({ initialWorkout, onSave, onClose }: WorkoutBuilderModalProps) {
+export function WorkoutBuilderModal({
+  initialWorkout,
+  onSave,
+  onDelete,
+  onClose,
+}: WorkoutBuilderModalProps) {
   const [name, setName] = useState(initialWorkout?.name || 'My Custom Workout');
   const [color, setColor] = useState(initialWorkout?.color || ACCENT_COLORS[0]);
   const [prepareSeconds, setPrepareSeconds] = useState(initialWorkout?.prepareSeconds ?? 10);
@@ -187,7 +190,7 @@ export function WorkoutBuilderModal({ initialWorkout, onSave, onClose }: Workout
           <button
             type="button"
             onClick={onClose}
-            className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95"
+            className="w-10 h-10 rounded-full bg-neutral-800 flex items-center justify-center text-neutral-300 hover:text-white transition active:scale-95 cursor-pointer"
             aria-label="Cancel"
           >
             <X className="w-5 h-5" />
@@ -197,14 +200,33 @@ export function WorkoutBuilderModal({ initialWorkout, onSave, onClose }: Workout
             {initialWorkout ? 'Edit Workout' : 'New Workout'}
           </h2>
 
-          <button
-            type="button"
-            onClick={handleSave}
-            className="w-10 h-10 rounded-full bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition active:scale-95 font-bold"
-            aria-label="Save Workout"
-          >
-            <Check className="w-5 h-5 stroke-[3]" />
-          </button>
+          <div className="flex items-center gap-2">
+            {initialWorkout && onDelete && (
+              <button
+                type="button"
+                onClick={() => {
+                  const res = onDelete(initialWorkout.id);
+                  if (res !== false) {
+                    onClose();
+                  }
+                }}
+                className="w-10 h-10 rounded-full bg-neutral-800 hover:bg-red-500/20 text-neutral-400 hover:text-red-400 flex items-center justify-center transition active:scale-95 cursor-pointer"
+                title="Delete timer"
+                aria-label="Delete timer"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={handleSave}
+              className="w-10 h-10 rounded-full bg-green-500 hover:bg-green-400 flex items-center justify-center text-black shadow-lg shadow-green-500/30 transition active:scale-95 font-bold cursor-pointer"
+              aria-label="Save Workout"
+            >
+              <Check className="w-5 h-5 stroke-[3]" />
+            </button>
+          </div>
         </header>
 
         {/* Scrollable Body */}
@@ -630,14 +652,30 @@ export function WorkoutBuilderModal({ initialWorkout, onSave, onClose }: Workout
         </div>
 
         {/* Modal Bottom Save Action for easy thumb reach */}
-        <footer className="safe-bottom p-4 border-t border-neutral-800 bg-neutral-900">
+        <footer className="safe-bottom p-4 border-t border-neutral-800 bg-neutral-900 space-y-2">
           <button
             type="button"
             onClick={handleSave}
-            className="w-full py-4 bg-green-500 hover:bg-green-400 text-black font-black uppercase tracking-wider rounded-2xl shadow-xl shadow-green-500/20 active:scale-95 transition"
+            className="w-full py-4 bg-green-500 hover:bg-green-400 text-black font-black uppercase tracking-wider rounded-2xl shadow-xl shadow-green-500/20 active:scale-95 transition cursor-pointer"
           >
             Save Workout
           </button>
+
+          {initialWorkout && onDelete && (
+            <button
+              type="button"
+              onClick={() => {
+                const res = onDelete(initialWorkout.id);
+                if (res !== false) {
+                  onClose();
+                }
+              }}
+              className="w-full py-3 bg-neutral-950 hover:bg-red-500/10 border border-neutral-800 hover:border-red-500/30 text-neutral-400 hover:text-red-400 font-bold uppercase tracking-wider rounded-2xl transition active:scale-95 flex items-center justify-center gap-2 text-xs cursor-pointer"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete Timer
+            </button>
+          )}
         </footer>
       </div>
 

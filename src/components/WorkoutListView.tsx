@@ -11,9 +11,6 @@ import {
   Share2,
   Plus,
   Clock,
-  RotateCw,
-  Flame,
-  Dumbbell,
 } from 'lucide-react';
 
 interface WorkoutListViewProps {
@@ -169,30 +166,50 @@ export function WorkoutListView({
                   </button>
                 </div>
 
-                {!workout.isDefault && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete(workout.id);
-                    }}
-                    className="p-2 rounded-lg text-neutral-500 hover:text-red-400 hover:bg-neutral-800 transition active:scale-95 cursor-pointer"
-                    title="Delete timer"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(workout.id);
+                  }}
+                  className="px-2.5 py-1.5 rounded-lg text-neutral-400 hover:text-red-400 hover:bg-red-500/10 text-xs font-bold flex items-center gap-1.5 transition active:scale-95 cursor-pointer"
+                  title="Delete timer"
+                  aria-label={`Delete ${workout.name}`}
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Delete</span>
+                </button>
               </div>
             </div>
           );
         })}
       </div>
 
-      {filteredWorkouts.length === 0 && (
+      {workouts.length === 0 ? (
+        <div className="p-10 text-center bg-neutral-900/50 rounded-3xl border border-neutral-800 space-y-4 my-4">
+          <div className="w-14 h-14 mx-auto rounded-2xl bg-neutral-800 flex items-center justify-center text-neutral-400">
+            <Clock className="w-7 h-7" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-base font-bold text-white">No timers saved</h3>
+            <p className="text-xs text-neutral-400 max-w-xs mx-auto">
+              Create your own custom interval workout by tapping the button below.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onCreateNew}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-green-500 hover:bg-green-400 text-black text-xs font-black uppercase tracking-wider transition active:scale-95 cursor-pointer shadow-lg shadow-green-500/20"
+          >
+            <Plus className="w-4 h-4 stroke-[3]" />
+            Create Timer
+          </button>
+        </div>
+      ) : filteredWorkouts.length === 0 ? (
         <div className="p-8 text-center text-neutral-400 bg-neutral-900/50 rounded-3xl border border-neutral-800">
           No timers found matching &quot;{search}&quot;.
         </div>
-      )}
+      ) : null}
 
       {/* Floating Action Button (FAB) - Matching screenshot timerplus_4.png! */}
       <div className="fixed right-5 bottom-6 z-40">

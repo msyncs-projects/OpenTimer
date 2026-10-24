@@ -8,33 +8,28 @@ import {
   saveSingleWorkout,
   deleteWorkout,
   duplicateWorkout,
-  loadWorkoutLogs,
   saveWorkoutLog,
-  clearWorkoutLogs,
   decodeWorkoutFromUrl,
 } from '@/lib/storage';
 import { WorkoutListView } from '@/components/WorkoutListView';
 import { WorkoutActiveScreen } from '@/components/WorkoutActiveScreen';
 import { WorkoutBuilderModal } from '@/components/WorkoutBuilderModal';
-import { WorkoutHistoryView } from '@/components/WorkoutHistoryView';
 import { ShareModal } from '@/components/ShareModal';
 import { unlockAudio, initGlobalAudioUnlock } from '@/lib/audio';
-import { Dumbbell, History, Share2, Plus, Sparkles, Smartphone } from 'lucide-react';
+import { Share2, Smartphone } from 'lucide-react';
 
 export default function Home() {
   const [workouts, setWorkouts] = useState<Workout[]>(DEFAULT_WORKOUTS);
-  const [logs, setLogs] = useState<WorkoutLog[]>([]);
   const [activeWorkout, setActiveWorkout] = useState<Workout | null>(null);
   const [builderWorkout, setBuilderWorkout] = useState<Workout | null | undefined>(undefined); // null = new, Workout = edit, undefined = closed
   const [shareWorkout, setShareWorkout] = useState<Workout | null | undefined>(undefined);
-  const [activeTab, setActiveTab] = useState<'timers' | 'history'>('timers');
   const [showPwaBanner, setShowPwaBanner] = useState(false);
 
   // Initialize on mount
   useEffect(() => {
     const loaded = loadWorkouts();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setWorkouts(loaded);
-    setLogs(loadWorkoutLogs());
 
     // Check for shared workout in URL
     if (typeof window !== 'undefined') {
@@ -91,7 +86,6 @@ export default function Home() {
       roundsCompleted: activeWorkout.rounds.length * (activeWorkout.rounds[0]?.repeats || 1),
     };
     saveWorkoutLog(log);
-    setLogs(loadWorkoutLogs());
   };
 
   const handleSaveWorkout = (saved: Workout) => {
@@ -100,24 +94,28 @@ export default function Home() {
     setBuilderWorkout(undefined);
   };
 
-  const handleDeleteWorkout = (id: string) => {
+  const handleDeleteWorkout = (id: string): boolean => {
     if (confirm('Are you sure you want to delete this timer?')) {
       const updated = deleteWorkout(id);
       setWorkouts(updated);
+      if (builderWorkout && builderWorkout.id === id) {
+        setBuilderWorkout(undefined);
+      }
+      if (shareWorkout && shareWorkout.id === id) {
+        setShareWorkout(undefined);
+      }
+      if (activeWorkout && activeWorkout.id === id) {
+        setActiveWorkout(null);
+      }
+      return true;
     }
+    return false;
   };
 
   const handleDuplicateWorkout = (workout: Workout) => {
     const copy = duplicateWorkout(workout);
     const updated = saveSingleWorkout(copy);
     setWorkouts(updated);
-  };
-
-  const handleClearHistory = () => {
-    if (confirm('Are you sure you want to clear your workout history?')) {
-      clearWorkoutLogs();
-      setLogs([]);
-    }
   };
 
   return (
@@ -140,7 +138,7 @@ export default function Home() {
           <button
             type="button"
             onClick={() => setShareWorkout(workouts[0] || null)}
-            className="px-3.5 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-bold active:scale-95 transition"
+            className="px-3.5 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-white flex items-center gap-1.5 text-xs font-bold active:scale-95 transition cursor-pointer"
             title="Share & Backup"
           >
             <Share2 className="w-4 h-4 text-green-400" />
@@ -163,56 +161,23 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setShowPwaBanner(false)}
-              className="text-neutral-500 hover:text-white px-2 py-1 font-bold text-sm"
+              className="text-neutral-500 hover:text-white px-2 py-1 font-bold text-sm cursor-pointer"
             >
               ✕
             </button>
           </div>
         )}
 
-        {/* Tab Selector */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 bg-neutral-900 rounded-2xl border border-neutral-800 mb-4 select-none">
-          <button
-            type="button"
-            onClick={() => setActiveTab('timers')}
-            className={`py-3 rounded-xl text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer ${
-              activeTab === 'timers'
-                ? 'bg-neutral-800 text-white shadow'
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            <Dumbbell className="w-4 h-4 text-green-400" />
-            Timers ({workouts.length})
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveTab('history')}
-            className={`py-3 rounded-xl text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer ${
-              activeTab === 'history'
-                ? 'bg-neutral-800 text-white shadow'
-                : 'text-neutral-400 hover:text-white'
-            }`}
-          >
-            <History className="w-4 h-4 text-amber-400" />
-            Journal ({logs.length})
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'timers' ? (
-          <WorkoutListView
-            workouts={workouts}
-            onStart={handleStartWorkout}
-            onEdit={(w) => setBuilderWorkout(w)}
-            onDuplicate={handleDuplicateWorkout}
-            onDelete={handleDeleteWorkout}
-            onShare={(w) => setShareWorkout(w)}
-            onCreateNew={() => setBuilderWorkout(null)}
-          />
-        ) : (
-          <WorkoutHistoryView logs={logs} onClear={handleClearHistory} />
-        )}
+        {/* Workout List */}
+        <WorkoutListView
+          workouts={workouts}
+          onStart={handleStartWorkout}
+          onEdit={(w) => setBuilderWorkout(w)}
+          onDuplicate={handleDuplicateWorkout}
+          onDelete={handleDeleteWorkout}
+          onShare={(w) => setShareWorkout(w)}
+          onCreateNew={() => setBuilderWorkout(null)}
+        />
       </div>
 
       {/* ========================================================
@@ -233,6 +198,7 @@ export default function Home() {
         <WorkoutBuilderModal
           initialWorkout={builderWorkout}
           onSave={handleSaveWorkout}
+          onDelete={handleDeleteWorkout}
           onClose={() => setBuilderWorkout(undefined)}
         />
       )}
